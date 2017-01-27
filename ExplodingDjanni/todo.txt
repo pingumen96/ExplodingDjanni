@@ -1,0 +1,9 @@
+Mazzo e carte
+[X] struttura carta
+[] creazione mazzo
+[] aggiunta carta in cima
+[] inserimento casuale della carta nel mazzo
+[] pescaggio carta
+
+Input/Output
+[] lettura file del mazzo

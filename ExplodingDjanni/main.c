@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "mazzo.h"
 
-int main()
-{
-    printf("Hello world!\n");
+int main() {
+    // per ora solo prove
+    NodoCarta *lista = nuovoMazzo();
+
+
+
     return 0;
 }

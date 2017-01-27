@@ -1,5 +1,11 @@
 # depslib dependency file v1.0
-1485528021 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/main.c
+1485532568 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/main.c
 	<stdio.h>
 	<stdlib.h>
+
+1485535596 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/mazzo.c
+	"mazzo.h"
+	<stdlib.h>
+
+1485535043 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/mazzo.h
 
