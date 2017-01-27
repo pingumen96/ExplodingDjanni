@@ -1,15 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+#include <time.h>
 #include "mazzo.h"
 #include "utilita.h"
 
 int main() {
-    // per ora solo prove
-    NodoCarta *lista = nuovoMazzo();
+    /* per ora solo prove */
+    Mazzo mazzo;
 
-    lista = caricaMazzo("explodingDjanniMedium.txt");
+    mazzo = caricaMazzo("explodingDjanniEasy.txt");
 
-    stampaMazzo(lista);
+    stampaMazzo(&mazzo);
 
 
     return 0;
