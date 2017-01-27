@@ -24,21 +24,6 @@ NodoCarta *prependCarta(NodoCarta *testa, Carta nuovaCarta) {
     return nuovaTesta;
 }
 
-/* funzione che restituisce la prima carta in cima al mazzo e la elimina dal mazzo stesso */
-Carta pescaCarta(NodoCarta **testa) {
-    Carta cartaPescata = (*testa)->carta;
-    NodoCarta **vecchiaTesta = NULL;
-
-    /* si libera lo spazio occupato dalla vecchia testa della lista */
-    *vecchiaTesta = *testa;
-    free(*vecchiaTesta);
-
-    /* viene settata una nuova testa perché la carta presente in precedenza è stata pescata */
-    *testa = (*testa)->prossima;
-
-    return cartaPescata;
-}
-
 void stampaCarta(Carta carta) {
     /* a seconda del tipo di carta si stampa quello corrispondente */
     if(carta.tipo == NOPE) {
@@ -126,12 +111,89 @@ Mazzo caricaMazzo(char* nomeFile) {
     return mazzo;
 }
 
+/*
+    Funzione che viene chiamata per mescolare il mazzo che viene passato come parametro.
+    Si può scegliere se rimuovere le carte Exploding Djanni e Meooow o aggiungerle a seconda
+    del valore passato nel secondo parametro.
+    'a' --> aggiungi
+    'r' --> rimuovi
+*/
+void mescolaMazzo(Mazzo *mazzo, char modalita) {
+    Mazzo *mazzoMescolato = NULL;
+    mazzoMescolato = (Mazzo *) malloc(sizeof(Mazzo));
+    unsigned short i, dimensioneMazzoOriginale, posizioneRandom;
 
-NodoCarta *prendiCarta(unsigned short posizione, Mazzo *mazzo) {
-    unsigned short posizioneFutura;
+    /* viene calcolata dimensione iniziale del mazzo */
+    dimensioneMazzoOriginale = dimensioneMazzo(mazzo);
+
+    if(modalita == 'a') {
+        mazzoMescolato->listaCarte = malloc(sizeof(NodoCarta) * (mazzo->numeroCarte));
+    } else if(modalita == 'r') {
+        mazzoMescolato->listaCarte = malloc(sizeof(NodoCarta) * (mazzo->numeroCarte - mazzo->numeroExplodingDjanni - mazzo->numeroMeow));
+
+        /* innanzitutto vanno tolte le carte Exploding Djanni e Meooow */
+        /* DA FARE */
+
+
+        for(i = 0; i < dimensioneMazzoOriginale; i++) {
+            posizioneRandom = rand() % dimensioneMazzo(mazzo);
+            /* creare funzione che restituisca carta che si trova in una determinata posizione e la tolga dalla lista */
+            mazzoMescolato->listaCarte = prependCarta(mazzoMescolato->listaCarte, prendiCarta(&(mazzo->listaCarte), posizioneRandom));
+
+            /* debug */
+            /*stampaMazzo(mazzoMescolato);
+            printf("%u\n\n", dimensioneMazzo(mazzoMescolato));*/
+            /* fine debug */
+        }
+    }
+
 }
 
 
-void mescolaMazzo(NodoCarta **testa) {
-    /* prima necessaria funzione che restituisca n-esimo elemento della lista e lo rimuova dalla lista */
+Carta prendiCarta(NodoCarta **testa, unsigned short posizione) {
+    NodoCarta *temp = *testa, *successivo, *cartaCercata;
+    unsigned short i;
+    /* se viene presa la testa */
+    if(posizione == 0) {
+        *testa = temp->prossima;
+        return temp->carta;
+    }
+
+
+    /* si cerca l'elemento che precede quello ricercato */
+    for(i = 0; i < posizione - 1; i++) {
+        temp = temp->prossima;
+    }
+
+    successivo = temp->prossima->prossima;
+
+    cartaCercata = temp->prossima;
+
+    temp->prossima = successivo;
+    return cartaCercata->carta;
+
+}
+
+NodoCarta *svuotaMazzo(NodoCarta *testa) {
+    NodoCarta *temp = NULL;
+
+    while(testa != NULL) {
+        temp = testa->prossima;
+        free(testa);
+        testa = temp;
+    }
+
+    return testa;
+}
+
+unsigned short dimensioneMazzo(Mazzo *mazzo) {
+    unsigned short contatoreCarte;
+    NodoCarta *corrente = mazzo->listaCarte;
+
+    while(corrente->prossima != NULL) {
+        contatoreCarte++;
+        corrente = corrente->prossima;
+    }
+
+    return contatoreCarte;
 }

@@ -24,9 +24,12 @@ typedef struct {
 } Mazzo;
 
 NodoCarta *prependCarta(NodoCarta *testa, Carta nuovaCarta);
-Carta pescaCarta();
+Carta pescaCarta(NodoCarta **testa);
 void stampaMazzo(Mazzo *mazzo);
 Mazzo caricaMazzo(char* nomeFile);
-void mescolaMazzo(Mazzo *mazzo);
+void mescolaMazzo(Mazzo *mazzo, char modalita);
+unsigned short dimensioneMazzo(Mazzo *mazzo);
+NodoCarta *svuotaMazzo(NodoCarta *testa);
+Carta prendiCarta(NodoCarta **testa, unsigned short posizione);
 
 #endif /* MAZZO_H_INCLUDED */
