@@ -1,11 +1,23 @@
 # depslib dependency file v1.0
-1485532568 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/main.c
+1485545584 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/main.c
 	<stdio.h>
 	<stdlib.h>
-
-1485535596 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/mazzo.c
 	"mazzo.h"
-	<stdlib.h>
+	"utilita.h"
 
-1485535043 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/mazzo.h
+1485545768 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/mazzo.c
+	"mazzo.h"
+	"utilita.h"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1485545484 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/mazzo.h
+
+1485546110 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/utilita.c
+	"utilita.h"
+	<math.h>
+
+1485546109 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/utilita.h
+	<stdbool.h>
 

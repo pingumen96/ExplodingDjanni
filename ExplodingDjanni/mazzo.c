@@ -1,5 +1,9 @@
 #include "mazzo.h"
+#include "utilita.h"
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 
 NodoCarta *nuovoMazzo() {
     // crea lista vuota
@@ -74,8 +78,57 @@ void stampaMazzo(NodoCarta *testa) {
     NodoCarta *iteratore = testa;
 
     // si scorre la lista stampando gli elementi uno per uno
-    while(testa->prossima != NULL) {
-        stampaCarta(testa->carta);
-        testa = testa->prossima;
+    while(iteratore != NULL) {
+        stampaCarta(iteratore->carta);
+        iteratore = iteratore->prossima;
     }
+}
+
+
+
+NodoCarta *caricaMazzo(char* nomeFile) {
+    FILE *fileMazzo;
+    NodoCarta *listaCaricata;
+    Carta cartaTemporanea = {0, ""};
+    char temp;
+    int contatoreCaratteri = 0, numeroCarte, i;
+
+    // viene aperto il file
+    fileMazzo = fopen(nomeFile, "r");
+
+    // ci si sposta di 7 byte in avanti e si inizia a leggere dalla prima carta
+    //fseek(fileMazzo, 7, SEEK_CUR);
+    numeroCarte = conversioneCifraCarattere(getc(fileMazzo));
+    fseek(fileMazzo, 1, SEEK_CUR);
+    numeroCarte += conversioneCifraCarattere(getc(fileMazzo));
+    fseek(fileMazzo, 1, SEEK_CUR);
+    numeroCarte += conversioneCifraCarattere(getc(fileMazzo)) * 10 + conversioneCifraCarattere(getc(fileMazzo));
+    fseek(fileMazzo, 1, SEEK_CUR);
+
+    // lettura da file e salvataggio nella lista
+    for(i = 0; i < numeroCarte; i++) {
+        cartaTemporanea.tipo = conversioneCifraCarattere(getc(fileMazzo));
+
+        fseek(fileMazzo, 1, SEEK_CUR);
+
+        // si legge sino alla fine della riga
+        while((temp = getc(fileMazzo)) != '\n' && temp != '\r') {
+            cartaTemporanea.titoloCarta[contatoreCaratteri] = temp;
+            contatoreCaratteri++;
+        }
+
+
+        // si aggiunge la carta alla lista
+        listaCaricata = prependCarta(listaCaricata, cartaTemporanea);
+
+        // si resetta tutto per la prossima carta da leggere
+        while(contatoreCaratteri != 0) {
+            cartaTemporanea.titoloCarta[contatoreCaratteri - 1] = '\0';
+            contatoreCaratteri--;
+        }
+        cartaTemporanea.tipo = 0;
+
+    }
+
+    return listaCaricata;
 }

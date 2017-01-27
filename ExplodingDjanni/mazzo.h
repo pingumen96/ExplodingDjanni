@@ -1,8 +1,8 @@
 #ifndef MAZZO_H_INCLUDED
 #define MAZZO_H_INCLUDED
-#define DIM_TITOLO_CARTA 30
+#define DIM_TITOLO_CARTA 66
 // definizione dei tipi di carta possibili
-typedef enum {NOPE, ATTACK, SKIP, FAVOR, SEE_THE_FUTURE, SHUFFLE, DJANNI, EXPLODING_DJANNI, MEOOOW} TipologiaCarta;
+typedef enum {EXPLODING_DJANNI, MEOOOW, SHUFFLE, NOPE, SEE_THE_FUTURE, ATTACK, SKIP, FAVOR, DJANNI} TipologiaCarta;
 
 // definizione struttura della carta singola
 typedef struct {
@@ -20,5 +20,6 @@ NodoCarta *nuovoMazzo();
 NodoCarta *prependCarta(NodoCarta *testa, Carta nuovaCarta);
 Carta pescaCarta();
 void stampaMazzo(NodoCarta *testa);
+NodoCarta *caricaMazzo(char* nomeFile);
 
 #endif // MAZZO_H_INCLUDED
