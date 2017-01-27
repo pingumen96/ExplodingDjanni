@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1485528021 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/main.c
+	<stdio.h>
+	<stdlib.h>
+
