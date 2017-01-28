@@ -125,11 +125,8 @@ Mazzo caricaMazzo(char* nomeFile) {
 void mescolaMazzo(Mazzo *mazzo, char modalita) {
     Mazzo *mazzoMescolato = NULL;
     mazzoMescolato = (Mazzo *) malloc(sizeof(Mazzo));
-    unsigned short i = 0, dimensioneMazzoOriginale, posizioneRandom;
-    NodoCarta *corrente, *temp;
-
-    /* viene calcolata dimensione iniziale del mazzo */
-    dimensioneMazzoOriginale = dimensioneMazzo(mazzo);
+    unsigned short i = 0, posizioneRandom;
+    NodoCarta *corrente;
 
     if(modalita == 'a') {
         mazzoMescolato->listaCarte = malloc(sizeof(NodoCarta) * (mazzo->numeroCarte));
@@ -139,39 +136,31 @@ void mescolaMazzo(Mazzo *mazzo, char modalita) {
             exit(-1);
         }
 
-        /* si tolgono le carte MEOOOW e EXPLODING DJANNI dal mazzo */
-
-        /* provo semplicemente a eliminare la prima carta */
-        /*eliminaCarta(&(mazzo->listaCarte), 0);
-        eliminaCarta(&(mazzo->listaCarte), 0);
-        printf("%u\n", dimensioneMazzo(mazzo));
-        stampaMazzo(mazzo);*/
-
         /* si eliminano le carte MEOOOW e EXPLODING DJANNI dal mazzo */
         corrente = mazzo->listaCarte;
         while(corrente != NULL) {
             if(corrente->carta.tipo == MEOOOW || corrente->carta.tipo == EXPLODING_DJANNI) {
                 eliminaCarta(&(mazzo->listaCarte), i);
-
             } else {
-
                 i++;
             }
+
             corrente = corrente->prossima;
-            printf("%u\n\n", dimensioneMazzo(mazzo));
-            stampaMazzo(mazzo);
+            /*printf("%u\n\n", dimensioneMazzo(mazzo));
+            stampaMazzo(mazzo); */
         }
-        printf("%u\n\n", dimensioneMazzo(mazzo));
+        /*printf("%u\n\n", dimensioneMazzo(mazzo));*/
 
 
 
-        /*for(i = 0; i < dimensioneMazzo(mazzo); i++) {
+        /* ora va costruito mazzo partendo dalle carte che si sono prese */
+        for(i = 0; i < mazzo->numeroCarte - mazzo->numeroExplodingDjanni - mazzo->numeroMeow; i++) {
             posizioneRandom = rand() % dimensioneMazzo(mazzo);
-             creare funzione che restituisca carta che si trova in una determinata posizione e la tolga dalla lista
+            /* creare funzione che restituisca carta che si trova in una determinata posizione e la tolga dalla lista */
             mazzoMescolato->listaCarte = prependCarta(mazzoMescolato->listaCarte, prendiCarta(&(mazzo->listaCarte), posizioneRandom));
             stampaMazzo(mazzoMescolato);
             printf("%u\n\n", dimensioneMazzo(mazzoMescolato));
-        }*/
+        }
     }
 
 }
