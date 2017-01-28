@@ -7,17 +7,15 @@
 
 int main() {
     /* per ora solo prove */
-    Mazzo mazzo;
+    Mazzo* mazzo = NULL;
+
 
     srand(time(NULL));
 
-    mazzo = caricaMazzo("explodingDjanniEasy.txt");
+    mazzo = caricaMazzo(MAZZO_EASY);
 
-    stampaMazzo(&mazzo);
-    printf("%u\n", dimensioneMazzo(&mazzo));
-
-    stampaMazzo(&mazzo);
-    mescolaMazzo(&mazzo, 'r');
-
+    mazzo = mescolaMazzo(mazzo, 'r');
+    mazzo = mescolaMazzo(mazzo, 'a');
+    printf("%u\n", dimensioneMazzo(mazzo));
     return 0;
 }

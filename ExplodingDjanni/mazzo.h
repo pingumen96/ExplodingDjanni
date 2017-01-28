@@ -1,6 +1,10 @@
 #ifndef MAZZO_H_INCLUDED
 #define MAZZO_H_INCLUDED
 #define DIM_TITOLO_CARTA 128
+#define DIM_TITOLO_MAZZO 30
+
+char *MAZZO_EASY, *MAZZO_MEDIUM, *MAZZO_HARD;
+
 /* definizione dei tipi di carta possibili */
 typedef enum {EXPLODING_DJANNI, MEOOOW, SHUFFLE, NOPE, SEE_THE_FUTURE, ATTACK, SKIP, FAVOR, DJANNI} TipologiaCarta;
 
@@ -21,15 +25,16 @@ typedef struct {
     unsigned short numeroExplodingDjanni;
     unsigned short numeroMeow;
     NodoCarta *listaCarte;
+    char nomeFileMazzo[DIM_TITOLO_MAZZO];
 } Mazzo;
 
 NodoCarta *prependCarta(NodoCarta *testa, Carta nuovaCarta);
 Carta pescaCarta(NodoCarta **testa);
 void stampaMazzo(Mazzo *mazzo);
-Mazzo caricaMazzo(char* nomeFile);
-void mescolaMazzo(Mazzo *mazzo, char modalita);
+Mazzo *caricaMazzo(char* nomeFile);
+Mazzo* mescolaMazzo(Mazzo *mazzo, char modalita);
 unsigned short dimensioneMazzo(Mazzo *mazzo);
-NodoCarta *svuotaMazzo(NodoCarta *testa);
+void svuotaMazzo(Mazzo *mazzo);
 Carta prendiCarta(NodoCarta **testa, unsigned short posizione);
 void eliminaCarta(NodoCarta **testa, unsigned short posizione);
 
