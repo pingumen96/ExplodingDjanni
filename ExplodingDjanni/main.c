@@ -12,10 +12,10 @@ int main() {
 
     srand(time(NULL));
 
-    mazzo = caricaMazzo(MAZZO_EASY);
+    mazzo = caricaMazzo(MAZZO_HARD);
 
     mazzo = mescolaMazzo(mazzo, 'r');
-    mazzo = mescolaMazzo(mazzo, 'a');
+    /*mazzo = mescolaMazzo(mazzo, 'a');*/
     printf("%u\n", dimensioneMazzo(mazzo));
     return 0;
 }
