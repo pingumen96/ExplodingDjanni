@@ -31,5 +31,6 @@ void mescolaMazzo(Mazzo *mazzo, char modalita);
 unsigned short dimensioneMazzo(Mazzo *mazzo);
 NodoCarta *svuotaMazzo(NodoCarta *testa);
 Carta prendiCarta(NodoCarta **testa, unsigned short posizione);
+void eliminaCarta(NodoCarta **testa, unsigned short posizione);
 
 #endif /* MAZZO_H_INCLUDED */

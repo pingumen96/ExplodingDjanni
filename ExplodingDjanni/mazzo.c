@@ -122,6 +122,7 @@ void mescolaMazzo(Mazzo *mazzo, char modalita) {
     Mazzo *mazzoMescolato = NULL;
     mazzoMescolato = (Mazzo *) malloc(sizeof(Mazzo));
     unsigned short i, dimensioneMazzoOriginale, posizioneRandom;
+    NodoCarta *corrente, *temp;
 
     /* viene calcolata dimensione iniziale del mazzo */
     dimensioneMazzoOriginale = dimensioneMazzo(mazzo);
@@ -132,7 +133,13 @@ void mescolaMazzo(Mazzo *mazzo, char modalita) {
         mazzoMescolato->listaCarte = malloc(sizeof(NodoCarta) * (mazzo->numeroCarte - mazzo->numeroExplodingDjanni - mazzo->numeroMeow));
 
         /* innanzitutto vanno tolte le carte Exploding Djanni e Meooow */
-        /* DA FARE */
+        corrente = mazzo->listaCarte;
+        for(i = 0; i < dimensioneMazzoOriginale; i++) {
+            if(corrente->carta.tipo == EXPLODING_DJANNI || corrente->carta.tipo == MEOOOW) {
+                eliminaCarta(&(mazzo->listaCarte), i);
+            }
+            corrente = corrente->prossima;
+        }
 
 
         for(i = 0; i < dimensioneMazzoOriginale; i++) {
@@ -141,8 +148,8 @@ void mescolaMazzo(Mazzo *mazzo, char modalita) {
             mazzoMescolato->listaCarte = prependCarta(mazzoMescolato->listaCarte, prendiCarta(&(mazzo->listaCarte), posizioneRandom));
 
             /* debug */
-            /*stampaMazzo(mazzoMescolato);
-            printf("%u\n\n", dimensioneMazzo(mazzoMescolato));*/
+            stampaMazzo(mazzoMescolato);
+            printf("%u\n\n", dimensioneMazzo(mazzoMescolato));
             /* fine debug */
         }
     }
@@ -172,6 +179,28 @@ Carta prendiCarta(NodoCarta **testa, unsigned short posizione) {
     temp->prossima = successivo;
     return cartaCercata->carta;
 
+}
+
+void eliminaCarta(NodoCarta **testa, unsigned short posizione) {
+    NodoCarta *temp = *testa, *successivo;
+    unsigned short i;
+    /* se viene rimossa la testa */
+    if(posizione == 0) {
+        *testa = temp->prossima;
+        return;
+    }
+
+
+    /* si cerca l'elemento che precede quello che si vuole eliminare */
+    for(i = 0; i < posizione - 1; i++) {
+        temp = temp->prossima;
+    }
+
+    successivo = temp->prossima->prossima;
+
+    free(temp->prossima);
+
+    temp->prossima = successivo;
 }
 
 NodoCarta *svuotaMazzo(NodoCarta *testa) {
