@@ -107,7 +107,11 @@ Mazzo caricaMazzo(char* nomeFile) {
 
     }
 
+
     mazzo.listaCarte = listaCaricata;
+
+    /* debug */
+    stampaMazzo(&mazzo);
     return mazzo;
 }
 
@@ -121,7 +125,7 @@ Mazzo caricaMazzo(char* nomeFile) {
 void mescolaMazzo(Mazzo *mazzo, char modalita) {
     Mazzo *mazzoMescolato = NULL;
     mazzoMescolato = (Mazzo *) malloc(sizeof(Mazzo));
-    unsigned short i, dimensioneMazzoOriginale, posizioneRandom;
+    unsigned short i = 0, dimensioneMazzoOriginale, posizioneRandom;
     NodoCarta *corrente, *temp;
 
     /* viene calcolata dimensione iniziale del mazzo */
@@ -131,27 +135,43 @@ void mescolaMazzo(Mazzo *mazzo, char modalita) {
         mazzoMescolato->listaCarte = malloc(sizeof(NodoCarta) * (mazzo->numeroCarte));
     } else if(modalita == 'r') {
         mazzoMescolato->listaCarte = malloc(sizeof(NodoCarta) * (mazzo->numeroCarte - mazzo->numeroExplodingDjanni - mazzo->numeroMeow));
+        if(mazzoMescolato->listaCarte == NULL) {
+            exit(-1);
+        }
 
-        /* innanzitutto vanno tolte le carte Exploding Djanni e Meooow */
+        /* si tolgono le carte MEOOOW e EXPLODING DJANNI dal mazzo */
+
+        /* provo semplicemente a eliminare la prima carta */
+        /*eliminaCarta(&(mazzo->listaCarte), 0);
+        eliminaCarta(&(mazzo->listaCarte), 0);
+        printf("%u\n", dimensioneMazzo(mazzo));
+        stampaMazzo(mazzo);*/
+
+        /* si eliminano le carte MEOOOW e EXPLODING DJANNI dal mazzo */
         corrente = mazzo->listaCarte;
-        for(i = 0; i < dimensioneMazzoOriginale; i++) {
-            if(corrente->carta.tipo == EXPLODING_DJANNI || corrente->carta.tipo == MEOOOW) {
+        while(corrente != NULL) {
+            if(corrente->carta.tipo == MEOOOW || corrente->carta.tipo == EXPLODING_DJANNI) {
                 eliminaCarta(&(mazzo->listaCarte), i);
+
+            } else {
+
+                i++;
             }
             corrente = corrente->prossima;
+            printf("%u\n\n", dimensioneMazzo(mazzo));
+            stampaMazzo(mazzo);
         }
+        printf("%u\n\n", dimensioneMazzo(mazzo));
 
 
-        for(i = 0; i < dimensioneMazzoOriginale; i++) {
+
+        /*for(i = 0; i < dimensioneMazzo(mazzo); i++) {
             posizioneRandom = rand() % dimensioneMazzo(mazzo);
-            /* creare funzione che restituisca carta che si trova in una determinata posizione e la tolga dalla lista */
+             creare funzione che restituisca carta che si trova in una determinata posizione e la tolga dalla lista
             mazzoMescolato->listaCarte = prependCarta(mazzoMescolato->listaCarte, prendiCarta(&(mazzo->listaCarte), posizioneRandom));
-
-            /* debug */
             stampaMazzo(mazzoMescolato);
             printf("%u\n\n", dimensioneMazzo(mazzoMescolato));
-            /* fine debug */
-        }
+        }*/
     }
 
 }
@@ -216,10 +236,10 @@ NodoCarta *svuotaMazzo(NodoCarta *testa) {
 }
 
 unsigned short dimensioneMazzo(Mazzo *mazzo) {
-    unsigned short contatoreCarte;
+    unsigned short contatoreCarte = 0;
     NodoCarta *corrente = mazzo->listaCarte;
 
-    while(corrente->prossima != NULL) {
+    while(corrente != NULL) {
         contatoreCarte++;
         corrente = corrente->prossima;
     }

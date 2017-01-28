@@ -1,13 +1,13 @@
 #ifndef MAZZO_H_INCLUDED
 #define MAZZO_H_INCLUDED
-#define DIM_TITOLO_CARTA 66
+#define DIM_TITOLO_CARTA 128
 /* definizione dei tipi di carta possibili */
 typedef enum {EXPLODING_DJANNI, MEOOOW, SHUFFLE, NOPE, SEE_THE_FUTURE, ATTACK, SKIP, FAVOR, DJANNI} TipologiaCarta;
 
 /* definizione struttura della carta singola */
 typedef struct {
     TipologiaCarta tipo;
-    char titoloCarta[DIM_TITOLO_CARTA + 1];
+    char titoloCarta[DIM_TITOLO_CARTA];
 } Carta;
 
 /* definizione nodo in vista della creazione di una lista */

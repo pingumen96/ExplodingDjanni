@@ -6,4 +6,4 @@ Mazzo e carte
 [] pescaggio carta
 
 Input/Output
-[] lettura file del mazzo
+[X] lettura file del mazzo
