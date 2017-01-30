@@ -1,27 +1,41 @@
 # depslib dependency file v1.0
-1485630827 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/main.c
+1485811418 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/main.c
 	<stdio.h>
 	<stdlib.h>
 	<math.h>
 	<time.h>
-	"mazzo.h"
 	"utilita.h"
+	"partita.h"
 
-1485630804 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/mazzo.c
+1485813904 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/mazzo.c
 	"mazzo.h"
 	"utilita.h"
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
 
-1485629553 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/mazzo.h
+1485702146 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/mazzo.h
 
 1485546110 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/utilita.c
 	"utilita.h"
 	<math.h>
 
-1485550578 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/utilita.h
+1485638810 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/utilita.h
 	<stdbool.h>
 
-1485638103 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/giocatore.c
+1485809627 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/giocatore.c
+	<stdlib.h>
+	<stdio.h>
+	"giocatore.h"
+
+1485809612 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/giocatore.h
+	<stdbool.h>
+	"mazzo.h"
+
+1485810758 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/partita.c
+	<stdlib.h>
+	"partita.h"
+
+1485708208 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/partita.h
+	"giocatore.h"
 
