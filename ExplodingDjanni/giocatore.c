@@ -6,10 +6,11 @@ Giocatore creaGiocatore() {
     Giocatore nuovoGiocatore;
 
     printf("Inserisci il nome del giocatore:\n");
+    getchar();
     scanf("%24[^\n]s", nuovoGiocatore.nome);
     getchar();
     printf("Che tipo di giocatore vuoi che sia?\n");
-    printf("0) CPU\n1) Umano\n");
+    printf("0. CPU\n1. Umano\n");
     do {
         scanf("%u", &(nuovoGiocatore.tipo));
         getchar();
