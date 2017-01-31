@@ -7,10 +7,12 @@ Giocatore creaGiocatore() {
 
     printf("Inserisci il nome del giocatore:\n");
     scanf("%24[^\n]s", nuovoGiocatore.nome);
+    getchar();
     printf("Che tipo di giocatore vuoi che sia?\n");
     printf("0) CPU\n1) Umano\n");
     do {
         scanf("%u", &(nuovoGiocatore.tipo));
+        getchar();
     } while(nuovoGiocatore.tipo != UMANO && nuovoGiocatore.tipo != CPU);
 
     /* si settano i dati di default */
@@ -20,6 +22,20 @@ Giocatore creaGiocatore() {
 
     return nuovoGiocatore;
 }
+
+Giocatore pescaggioPrimoTurno(NodoCarta **meooowRimossi, Giocatore *giocatore, Mazzo *mazzo) {
+    riceviCarte(giocatore, 4, mazzo);
+
+    giocatore->mano = (Carta *) realloc(giocatore->mano, (giocatore->carteInMano + 1) * sizeof(Carta));
+    if(giocatore->mano == NULL) {
+        exit(-1);
+    }
+    giocatore->mano[giocatore->carteInMano] = prendiCarta(meooowRimossi, 0);
+
+    giocatore->carteInMano += 1;
+    return *giocatore;
+}
+
 
 /* funzione che permette di far pescare al giocatore un determinato numero di carte */
 void riceviCarte(Giocatore *giocatore, unsigned short numeroCarte, Mazzo *mazzo) {

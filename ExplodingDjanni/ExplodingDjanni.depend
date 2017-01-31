@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1485811418 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/main.c
+1485815534 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/main.c
 	<stdio.h>
 	<stdlib.h>
 	<math.h>
@@ -23,7 +23,7 @@
 1485638810 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/utilita.h
 	<stdbool.h>
 
-1485809627 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/giocatore.c
+1485815583 source:/home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/giocatore.c
 	<stdlib.h>
 	<stdio.h>
 	"giocatore.h"
