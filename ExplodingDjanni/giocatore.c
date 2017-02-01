@@ -8,12 +8,11 @@ Giocatore creaGiocatore() {
     printf("Inserisci il nome del giocatore:\n");
     getchar();
     scanf("%24[^\n]s", nuovoGiocatore.nome);
-    getchar();
     printf("Che tipo di giocatore vuoi che sia?\n");
     printf("0. CPU\n1. Umano\n");
     do {
         scanf("%u", &(nuovoGiocatore.tipo));
-        getchar();
+        /*getchar();*/
     } while(nuovoGiocatore.tipo != UMANO && nuovoGiocatore.tipo != CPU);
 
     /* si settano i dati di default */
@@ -59,7 +58,21 @@ void riceviCarte(Giocatore *giocatore, unsigned short numeroCarte, Mazzo *mazzo)
 void stampaMano(Giocatore *giocatore) {
     unsigned short i;
 
+    printf("Mano di %s:\n", giocatore->nome);
     for(i = 0; i < giocatore->carteInMano; i++) {
         stampaCarta(giocatore->mano[i]);
     }
+}
+
+
+bool presenteExplodingDjanni(Giocatore *giocatore) {
+    unsigned short i;
+
+    for(i = 0; i < giocatore->carteInMano; i++) {
+        if(giocatore->mano[i].tipo == EXPLODING_DJANNI) {
+            return true;
+        }
+    }
+
+    return false;
 }

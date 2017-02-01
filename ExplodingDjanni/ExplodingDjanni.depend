@@ -40,3 +40,40 @@
 
 1485827498 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/partita.h
 
+1485907664 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/giocatore.c
+	<stdlib.h>
+	<stdio.h>
+	"giocatore.h"
+
+1485907025 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/giocatore.h
+	<stdbool.h>
+	"mazzo.h"
+
+1485903571 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/mazzo.h
+
+1485903571 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/mazzo.c
+	"mazzo.h"
+	"utilita.h"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1485903571 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/utilita.h
+	<stdbool.h>
+
+1485903571 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/utilita.c
+	"utilita.h"
+	<math.h>
+
+1485908900 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<time.h>
+	<stdbool.h>
+	"partita.h"
+	"utilita.h"
+	"giocatore.h"
+
+1485906434 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/partita.h
+

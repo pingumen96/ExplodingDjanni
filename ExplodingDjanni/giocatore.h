@@ -18,3 +18,4 @@ Giocatore creaGiocatore();
 Giocatore pescaggioPrimoTurno(NodoCarta **meooowRimossi, Giocatore *giocatore, Mazzo *mazzo);
 void riceviCarte(Giocatore *giocatore, unsigned short numeroCarte, Mazzo *mazzo);
 void stampaMano(Giocatore *giocatore);
+bool presenteExplodingDjanni(Giocatore *giocatore);
