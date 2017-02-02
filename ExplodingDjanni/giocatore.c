@@ -76,3 +76,24 @@ bool presenteExplodingDjanni(Giocatore *giocatore) {
 
     return false;
 }
+
+
+Carta scartaCartaTipo(Giocatore *giocatore, TipologiaCarta tipoCarta) {
+    /* da scrivere */
+}
+
+Carta scartaCarta(Giocatore *giocatore, unsigned short indice) {
+    /* da scrivere */
+}
+
+bool possiedeTipoCarta(Giocatore *giocatore, TipologiaCarta tipoCarta) {
+    unsigned short i;
+
+    for(i = 0; i < giocatore->carteInMano; i++) {
+        if(giocatore->mano[i].tipo == tipoCarta) {
+            return true;
+        }
+    }
+
+    return false;
+}

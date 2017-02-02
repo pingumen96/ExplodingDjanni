@@ -19,3 +19,6 @@ Giocatore pescaggioPrimoTurno(NodoCarta **meooowRimossi, Giocatore *giocatore, M
 void riceviCarte(Giocatore *giocatore, unsigned short numeroCarte, Mazzo *mazzo);
 void stampaMano(Giocatore *giocatore);
 bool presenteExplodingDjanni(Giocatore *giocatore);
+Carta scartaCarta(Giocatore *giocatore, unsigned short indice);
+Carta scartaCartaTipo(Giocatore *giocatore, TipologiaCarta tipoCarta);
+bool possiedeTipoCarta(Giocatore *giocatore, TipologiaCarta tipoCarta);

@@ -11,8 +11,9 @@ int main() {
     /* variabili di gioco */
     Giocatore giocatori[N_GIOCATORI];
     Mazzo *mazzo = NULL;
-    bool gameOver = false;
-    unsigned short scelta, i, giocatoreCorrente;
+    bool gameOver = false, saltaPesca = false;
+    char sceltaSiNo;
+    unsigned short scelta, sceltaMenuPrincipale, sceltaGioco = 0, i, giocatoreCorrente, giocatoreSuccessivo;
     StatiGioco stato = MENU_PRINCIPALE;
     NodoCarta *meooowRimossi;
 
@@ -31,17 +32,17 @@ int main() {
     /* ciclo di gioco */
     while(!gameOver) {
         if(stato == MENU_PRINCIPALE) {
-            /**/
+            /* menù principale */
             printf("Benvenuto in Exploding Djanni!\n");
             printf("0. Nuova partita\n1. Carica partita\n");
 
             do {
-                scanf("%hu", &scelta);
-            } while(scelta != NUOVA_PARTITA && scelta != CARICA_PARTITA);
+                scanf("%hu", &sceltaMenuPrincipale);
+            } while(sceltaMenuPrincipale != NUOVA_PARTITA && sceltaMenuPrincipale != CARICA_PARTITA);
 
 
             /* setup della partita in base alla volontà di crearne una nuova o caricarla */
-            if(scelta == NUOVA_PARTITA) {
+            if(sceltaMenuPrincipale == NUOVA_PARTITA) {
                 printf("Scegli la difficolta':\n");
                 printf("0. Easy\n1. Medium\n2. Hard\n");
                 do {
@@ -86,7 +87,7 @@ int main() {
 
                 stato = IN_GIOCO;
 
-            } else if(scelta == CARICA_PARTITA) {
+            } else if(sceltaMenuPrincipale == CARICA_PARTITA) {
                 /* codice per caricare la partita da file binario */
                 stato = IN_GIOCO;
             }
@@ -118,41 +119,114 @@ int main() {
                         stampaMano(&giocatori[giocatoreCorrente]);
 
                         /* si resetta la scelta */
-                        scelta = 0;
+                        sceltaGioco = 0;
 
                         /* giocatore effettua la scelta finché non decide di finire il turno */
-                        while(scelta != FINISCI_TURNO) {
+                        while(sceltaGioco != FINISCI_TURNO) {
                             /* menù delle possibili scelte */
                             printf("Cosa vuoi fare?\n");
 
                             if(giocatori[giocatoreCorrente].carteInMano > 0) {
                                 printf("0. gioca carta (%hu carte nella mano)\n", giocatori[giocatoreCorrente].carteInMano);
+                            } else {
+                                printf("Non hai carte in mano.\n");
                             }
                             printf("1. pesca una carta e concludi turno\n");
                             printf("2. salva partita\n");
                             do {
-                                scanf("%hu", &scelta);
+                                scanf("%hu", &sceltaGioco);
                                 getchar();
                             } while(scelta != GIOCA_CARTA && scelta != FINISCI_TURNO);
 
                             /* se il giocatore ha scelto di giocare una carta */
-                            if(scelta == GIOCA_CARTA) {
+                            if(sceltaGioco == GIOCA_CARTA) {
                                 /* gestione di tutto ciò che riguarda gli effetti delle carte */
-                            } else if(scelta == FINISCI_TURNO) {
-                                riceviCarte(&giocatori[giocatoreCorrente], 1, mazzo);
-                                printf("Hai pescato %s\n", giocatori[giocatoreCorrente].mano[giocatori[giocatoreCorrente].carteInMano - 1].titoloCarta);
-
-                                /* se il giocatore ha pescato EXPLODING DJANNI esplode ed esce dal gioco */
-                                if(presenteExplodingDjanni(&giocatori[giocatoreCorrente])) {
-                                    giocatori[giocatoreCorrente].inGioco = false;
+                                printf("Scegli quale carta giocare:\n");
+                                for(i = 0; i < giocatori[giocatoreCorrente].carteInMano; i++) {
+                                    printf("%hu. %s\n", i, giocatori[giocatoreCorrente].mano[i].titoloCarta);
                                 }
-                            } else if(scelta == SALVA_PARTITA) {
+
+                                scanf("%hu", &scelta);
+                                getchar();
+
+                                /* si dice quale carta sia stata giocata */
+                                printf("Carta giocata: ");
+                                stampaCarta(giocatori[giocatoreCorrente].mano[scelta]);
+
+                                /* attivazione effetto della carta */
+
+                                /* si controlla se il giocatore successivo (ancora in gioco) possiede un NOPE per bloccare l'effetto se possibile */
+                                do {
+                                    giocatoreSuccessivo = (giocatoreCorrente + 1) % N_GIOCATORI;
+                                } while(!giocatori[giocatoreSuccessivo].inGioco);
+
+                                if(possiedeTipoCarta(&giocatori[giocatoreSuccessivo], NOPE) &&
+                                        giocatori[giocatoreSuccessivo].mano[scelta].tipo != EXPLODING_DJANNI &&
+                                        giocatori[giocatoreSuccessivo].mano[scelta].tipo != MEOOOW) {
+                                    printf("%s, vuoi annullare l'effetto della carta giocata da %s? (s/n)\n", giocatori[giocatoreSuccessivo].nome, giocatori[giocatoreCorrente].nome);
+                                    do {
+                                        scanf("%c", &sceltaSiNo);
+                                        getchar();
+
+                                    } while(sceltaSiNo != 'n' && sceltaSiNo != 's');
+                                }
+
+                                if(sceltaSiNo == 's') {
+                                    /* si scarta il NOPE del giocatore successivo */
+                                    scartaCartaTipo(&giocatori[giocatoreSuccessivo], NOPE);
+                                } else {
+                                    /* si attiva effetto della carta giocata */
+                                    if(giocatori[giocatoreCorrente].mano[scelta].tipo == SHUFFLE) {
+                                        /* mazzo viene mischiato */
+                                        mazzo = mescolaMazzo(mazzo, 's', &meooowRimossi);
+                                        printf("Il mazzo è stato mescolato.\n");
+                                    } else if(giocatori[giocatoreCorrente].mano[scelta].tipo == SKIP) {
+                                        saltaPesca = true;
+                                    }
+                                }
+
+                                /* infine la carta giocata viene scartata dal gioco */
+                                scartaCarta(&giocatori[giocatoreCorrente], scelta);
+
+                            } else if(sceltaGioco == FINISCI_TURNO) {
+                                /* se il giocatore non deve saltare la pesca (come nel caso in cui abbia giocato una carta SKIP) */
+                                if(!saltaPesca) {
+                                    riceviCarte(&giocatori[giocatoreCorrente], 1, mazzo);
+                                    printf("Hai pescato %s\n", giocatori[giocatoreCorrente].mano[giocatori[giocatoreCorrente].carteInMano - 1].titoloCarta);
+
+                                    /*
+                                        se il giocatore ha pescato EXPLODING DJANNI esplode ed esce dal gioco a meno che non utilizzi
+                                        un MEOOOW
+                                    */
+                                    if(possiedeTipoCarta(&giocatori[giocatoreCorrente], EXPLODING_DJANNI) &&
+                                            !possiedeTipoCarta(&giocatori[giocatoreCorrente], MEOOOW)) {
+                                        giocatori[giocatoreCorrente].inGioco = false;
+                                    } else if(possiedeTipoCarta(&giocatori[giocatoreCorrente], EXPLODING_DJANNI) &&
+                                              possiedeTipoCarta(&giocatori[giocatoreCorrente], MEOOOW)) {
+                                        printf("%s, vuoi giocare la tua carta MEOOOW per non uscire dal gioco? (s/n)\n", giocatori[giocatoreCorrente].nome);
+
+                                        do {
+                                            scanf("%c", &sceltaSiNo);
+                                            getchar();
+                                        } while(sceltaSiNo != 's' && sceltaSiNo != 'n');
+
+                                        if(sceltaSiNo == 's') {
+                                            /* scarta il MEOOOW */
+                                            scartaCartaTipo(&giocatori[giocatoreSuccessivo], MEOOOW);
+
+                                            /* si rimette EXPLODING DJANNI nel mazzo in un posto casuale */
+                                        } else {
+                                            /* se il giocatore, abbastanza stupidamente, non utilizza il MEOOOW di cui dispone, esplode */
+                                            giocatori[giocatoreCorrente].inGioco = false;
+                                        }
+                                    }
+
+
+                                }
+                            } else if(sceltaGioco == SALVA_PARTITA) {
                                 /* salvataggio della partita in un file con estensione .sav */
                             }
                         }
-
-
-
 
 
                     } else {
@@ -162,6 +236,7 @@ int main() {
                 }
 
                 /* si controlla se si è game over, se sì si decreta il vincitore, se no si prosegue col prossimo turno */
+                /* al posto di questa condizione enorme si deve creare una funzione */
                 if((giocatori[0].inGioco && !giocatori[1].inGioco && !giocatori[2].inGioco && !giocatori[3].inGioco) ||
                         (giocatori[1].inGioco && !giocatori[2].inGioco && !giocatori[3].inGioco && !giocatori[0].inGioco) ||
                         (giocatori[2].inGioco && !giocatori[3].inGioco && !giocatori[0].inGioco && !giocatori[1].inGioco) ||
@@ -178,6 +253,12 @@ int main() {
                 }
 
 
+                /* reset delle variabili */
+                sceltaSiNo = 0;
+                saltaPesca = false;
+                sceltaGioco = 0;
+
+
 
             }
         }
@@ -186,7 +267,7 @@ int main() {
 
     }
 
-    /* si decreta il vincitore */
+    /* si annuncia il vincitore, ovvero l'ultimo ad essere rimasto in gioco */
     printf("Il vincitore della partita e' %s!\n", giocatori[giocatoreCorrente].nome);
 
     return 0;
