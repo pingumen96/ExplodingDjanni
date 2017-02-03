@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include "giocatore.h"
 
 Giocatore creaGiocatore() {
@@ -79,11 +80,77 @@ bool presenteExplodingDjanni(Giocatore *giocatore) {
 
 
 Carta scartaCartaTipo(Giocatore *giocatore, TipologiaCarta tipoCarta) {
-    /* da scrivere */
+    unsigned short i, j = 0;
+    bool scartata = false;
+    Carta cartaScartata;
+    Carta *nuovaMano;
+    nuovaMano = (Carta *) malloc(sizeof(Carta) * (giocatore->carteInMano - 1));
+    if(nuovaMano == NULL) {
+        exit(-1);
+    }
+
+    /* debug */
+    /*stampaMano(giocatore);*/
+    /* fine debug */
+
+    /* si mettono nel nuovo array tutte le carte della mano tranne quella scartata */
+    for(i = 0; i < giocatore->carteInMano; i++) {
+        if(giocatore->mano[i].tipo != tipoCarta || scartata) {
+            nuovaMano[j] = giocatore->mano[i];
+            j++;
+        } else {
+            cartaScartata = giocatore->mano[i];
+            scartata = true;
+        }
+
+    }
+
+    /* si libera la memoria occupata dal vecchio array */
+    free(giocatore->mano);
+    giocatore->mano = nuovaMano;
+    (giocatore->carteInMano)--;
+
+    /* debug */
+    stampaMano(giocatore);
+
+    return cartaScartata;
+
+
 }
 
+/***********************************************************************************
+    funzione che permette di scartare una carta dalla mano di un giocatore.
+    Si restituisce la carta scartata perché potrebbe essere utile, ma si può anche
+    "lasciar cadere nel vuoto".
+***********************************************************************************/
 Carta scartaCarta(Giocatore *giocatore, unsigned short indice) {
-    /* da scrivere */
+    unsigned short i, j;
+    Carta cartaScartata;
+    Carta *nuovaMano = (Carta *) malloc(sizeof(Carta) * (giocatore->carteInMano - 1));
+    if(nuovaMano == NULL) {
+        exit(-1);
+    }
+
+    /* si mettono nel nuovo array tutte le carte della mano tranne quella scartata */
+    for(i = 0, j = 0; i < giocatore->carteInMano; i++) {
+        if(i != indice) {
+            nuovaMano[j] = giocatore->mano[i];
+            j++;
+        } else {
+            cartaScartata = giocatore->mano[i];
+        }
+
+    }
+
+    free(giocatore->mano);
+    giocatore->mano = nuovaMano;
+    (giocatore->carteInMano)--;
+
+    /* debug */
+    /*stampaMano(giocatore);*/
+
+
+    return cartaScartata;
 }
 
 bool possiedeTipoCarta(Giocatore *giocatore, TipologiaCarta tipoCarta) {

@@ -38,3 +38,4 @@ NodoCarta *svuotaMazzo(NodoCarta *testa);
 Carta prendiCarta(NodoCarta **testa, unsigned short posizione);
 void eliminaCarta(NodoCarta **testa, unsigned short posizione);
 unsigned short contatoreMeooow(NodoCarta *testa);
+void stampaCarta(Carta carta);

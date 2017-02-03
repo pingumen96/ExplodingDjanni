@@ -48,6 +48,8 @@ void stampaCarta(Carta carta) {
         printf("FAVOR\t\t");
     } else if(carta.tipo == DJANNI) {
         printf("DJANNI\t\t");
+    } else {
+        printf("EXPLODING DJANNI\t\t");
     }
 
     printf("%s", carta.titoloCarta);
@@ -156,25 +158,21 @@ Mazzo *mescolaMazzo(Mazzo *mazzo, char modalita, NodoCarta **meoowRimossi) {
         contatoreMeooowTolti = contatoreMeooow(mazzo->listaCarte);
         while(dimensioneMazzo(*meoowRimossi) > 0) {
             mazzo->listaCarte = prependCarta(mazzo->listaCarte, prendiCarta(meoowRimossi, 0));
-            printf("%u\n", dimensioneMazzo(mazzo->listaCarte));
+            /*printf("%u\n", dimensioneMazzo(mazzo->listaCarte));
             stampaMazzo(mazzo->listaCarte);
-            printf("%u\n", dimensioneMazzo(*meoowRimossi));
+            printf("%u\n", dimensioneMazzo(*meoowRimossi));*/
         }
 
         /* si reinseriscono gli EXPLODING DJANNI */
         for(i = 0; i < mazzo->numeroExplodingDjanni; i++) {
             mazzo->listaCarte = prependCarta(mazzo->listaCarte, explodingDjanni);
-            printf("%u\n", dimensioneMazzo(mazzo->listaCarte));
-            stampaMazzo(mazzo->listaCarte);
+            /*printf("%u\n", dimensioneMazzo(mazzo->listaCarte));
+            stampaMazzo(mazzo->listaCarte);*/
         }
 
 
     } else if(modalita == 'r') {
         /* si eliminano 4 carte MEOOOW e tutti gli EXPLODING DJANNI dal mazzo */
-        mazzoMescolato = (NodoCarta *) malloc(sizeof(NodoCarta));
-        if(mazzoMescolato == NULL) {
-            exit(-1);
-        }
 
         corrente = mazzo->listaCarte;
         while(corrente != NULL) {
@@ -203,21 +201,14 @@ Mazzo *mescolaMazzo(Mazzo *mazzo, char modalita, NodoCarta **meoowRimossi) {
             posizioneRandom = rand() % dimensioneMazzo(mazzo->listaCarte);
             /* creare funzione che restituisca carta che si trova in una determinata posizione e la tolga dalla lista */
             mazzoMescolato = prependCarta(mazzoMescolato, prendiCarta(&(mazzo->listaCarte), posizioneRandom));
-            stampaMazzo(mazzoMescolato);
-            printf("%u\n\n", dimensioneMazzo(mazzoMescolato));
+            /*stampaMazzo(mazzoMescolato);
+            printf("%u\n\n", dimensioneMazzo(mazzoMescolato));*/
         }
 
         mazzo->listaCarte = mazzoMescolato;
     } else if(modalita == 's') {
         /* parte che si occupa semplicemente di mescolare il mazzo senza aggiungere o rimuovere niente */
-        mazzoMescolato = (NodoCarta *) malloc(sizeof(NodoCarta));
-        if(mazzoMescolato == NULL) {
-            exit(-1);
-        }
-
-        /* per un qualche motivo si trovano già carte all'interno del mazzo quando questo viene creato, si svuota e si toglie ogni dubbio */
-        mazzoMescolato = svuotaMazzo(mazzoMescolato);
-
+        mazzoMescolato = NULL;
 
         dimensioneMazzoPartita = dimensioneMazzo(mazzo->listaCarte);
         /* ora si costruisce il mazzo mescolato partendo dalle carte che si sono prese */
@@ -225,10 +216,12 @@ Mazzo *mescolaMazzo(Mazzo *mazzo, char modalita, NodoCarta **meoowRimossi) {
             posizioneRandom = rand() % dimensioneMazzo(mazzo->listaCarte);
             /* creare funzione che restituisca carta che si trova in una determinata posizione e la tolga dalla lista */
             mazzoMescolato = prependCarta(mazzoMescolato, prendiCarta(&(mazzo->listaCarte), posizioneRandom));
-            stampaMazzo(mazzoMescolato);
-            printf("%u\n\n", dimensioneMazzo(mazzoMescolato));
+            /*stampaMazzo(mazzoMescolato);
+            printf("%u\n\n", dimensioneMazzo(mazzoMescolato));*/
         }
 
+
+        mazzo->listaCarte = svuotaMazzo(mazzo->listaCarte);
         mazzo->listaCarte = mazzoMescolato;
     }
 

@@ -46,7 +46,7 @@ bool cifra(char carattere) {
     }
 }
 
-
+/* funzione che si occupa di leggere un numero intero presente in una stringa */
 int convertiStringaIntero(char *stringa) {
     unsigned short i = 0;
     unsigned int numeroCifre = 0, numeroConvertito = 0;

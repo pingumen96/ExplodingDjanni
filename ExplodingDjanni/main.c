@@ -11,9 +11,9 @@ int main() {
     /* variabili di gioco */
     Giocatore giocatori[N_GIOCATORI];
     Mazzo *mazzo = NULL;
-    bool gameOver = false, saltaPesca = false;
-    char sceltaSiNo;
-    unsigned short scelta, sceltaMenuPrincipale, sceltaGioco = 0, i, giocatoreCorrente, giocatoreSuccessivo;
+    bool gameOver = false, saltaPesca = false, turnoDoppio = false;
+    char sceltaSiNo = 0;
+    unsigned short scelta, sceltaMenuPrincipale, sceltaGioco = 0, i, giocatoreCorrente, giocatoreSuccessivo, vittimaAttack;
     StatiGioco stato = MENU_PRINCIPALE;
     NodoCarta *meooowRimossi;
 
@@ -27,6 +27,9 @@ int main() {
     if(!meooowRimossi) {
         exit(-1);
     }
+
+    /* generazione casuale */
+    srand(time(NULL));
 
 
     /* ciclo di gioco */
@@ -74,7 +77,7 @@ int main() {
                     giocatori[i].inGioco = true;
 
                     /* stampa mano, debug*/
-                    stampaMano(&giocatori[0]);
+                    stampaMano(&giocatori[i]);
                 }
 
                 /* si rimettono le carte nel mazzo e si mescola */
@@ -93,8 +96,16 @@ int main() {
             }
 
         } else if(stato == IN_GIOCO) {
+
+
             /* si svolgono i turni di tutti i giocatori */
             while(giocatoreCorrente < N_GIOCATORI && !gameOver) {
+                giocatoreSuccessivo = giocatoreCorrente;
+                do {
+                    giocatoreSuccessivo = (giocatoreSuccessivo + 1) % N_GIOCATORI;
+                } while(!giocatori[giocatoreSuccessivo].inGioco);
+
+
                 /* giocatore fa il suo turno solo se è in gioco */
                 if(giocatori[giocatoreCorrente].inGioco) {
                     printf("Tocca a %s!\n", giocatori[giocatoreCorrente].nome);
@@ -136,14 +147,15 @@ int main() {
                             do {
                                 scanf("%hu", &sceltaGioco);
                                 getchar();
-                            } while(scelta != GIOCA_CARTA && scelta != FINISCI_TURNO);
+                            } while(sceltaGioco != GIOCA_CARTA && sceltaGioco != FINISCI_TURNO);
 
                             /* se il giocatore ha scelto di giocare una carta */
                             if(sceltaGioco == GIOCA_CARTA) {
                                 /* gestione di tutto ciò che riguarda gli effetti delle carte */
                                 printf("Scegli quale carta giocare:\n");
                                 for(i = 0; i < giocatori[giocatoreCorrente].carteInMano; i++) {
-                                    printf("%hu. %s\n", i, giocatori[giocatoreCorrente].mano[i].titoloCarta);
+                                    printf("%hu. ", i);
+                                    stampaCarta(giocatori[giocatoreCorrente].mano[i]);
                                 }
 
                                 scanf("%hu", &scelta);
@@ -156,13 +168,11 @@ int main() {
                                 /* attivazione effetto della carta */
 
                                 /* si controlla se il giocatore successivo (ancora in gioco) possiede un NOPE per bloccare l'effetto se possibile */
-                                do {
-                                    giocatoreSuccessivo = (giocatoreCorrente + 1) % N_GIOCATORI;
-                                } while(!giocatori[giocatoreSuccessivo].inGioco);
+
 
                                 if(possiedeTipoCarta(&giocatori[giocatoreSuccessivo], NOPE) &&
-                                        giocatori[giocatoreSuccessivo].mano[scelta].tipo != EXPLODING_DJANNI &&
-                                        giocatori[giocatoreSuccessivo].mano[scelta].tipo != MEOOOW) {
+                                        giocatori[giocatoreCorrente].mano[scelta].tipo != EXPLODING_DJANNI &&
+                                        giocatori[giocatoreCorrente].mano[scelta].tipo != MEOOOW) {
                                     printf("%s, vuoi annullare l'effetto della carta giocata da %s? (s/n)\n", giocatori[giocatoreSuccessivo].nome, giocatori[giocatoreCorrente].nome);
                                     do {
                                         scanf("%c", &sceltaSiNo);
@@ -175,13 +185,16 @@ int main() {
                                     /* si scarta il NOPE del giocatore successivo */
                                     scartaCartaTipo(&giocatori[giocatoreSuccessivo], NOPE);
                                 } else {
-                                    /* si attiva effetto della carta giocata */
+                                    /* si attiva effetto della carta giocata, diverso a seconda del tipo */
                                     if(giocatori[giocatoreCorrente].mano[scelta].tipo == SHUFFLE) {
                                         /* mazzo viene mischiato */
                                         mazzo = mescolaMazzo(mazzo, 's', &meooowRimossi);
                                         printf("Il mazzo è stato mescolato.\n");
                                     } else if(giocatori[giocatoreCorrente].mano[scelta].tipo == SKIP) {
                                         saltaPesca = true;
+                                    } else if(giocatori[giocatoreCorrente].mano[scelta].tipo == ATTACK) {
+                                        turnoDoppio = true;
+                                        vittimaAttack = giocatoreSuccessivo;
                                     }
                                 }
 
@@ -192,7 +205,9 @@ int main() {
                                 /* se il giocatore non deve saltare la pesca (come nel caso in cui abbia giocato una carta SKIP) */
                                 if(!saltaPesca) {
                                     riceviCarte(&giocatori[giocatoreCorrente], 1, mazzo);
-                                    printf("Hai pescato %s\n", giocatori[giocatoreCorrente].mano[giocatori[giocatoreCorrente].carteInMano - 1].titoloCarta);
+                                    printf("Hai pescato ");
+                                    stampaCarta(giocatori[giocatoreCorrente].mano[giocatori[giocatoreCorrente].carteInMano - 1]);
+                                    printf("\n");
 
                                     /*
                                         se il giocatore ha pescato EXPLODING DJANNI esplode ed esce dal gioco a meno che non utilizzi
@@ -212,9 +227,15 @@ int main() {
 
                                         if(sceltaSiNo == 's') {
                                             /* scarta il MEOOOW */
-                                            scartaCartaTipo(&giocatori[giocatoreSuccessivo], MEOOOW);
+                                            scartaCartaTipo(&giocatori[giocatoreCorrente], MEOOOW);
 
                                             /* si rimette EXPLODING DJANNI nel mazzo in un posto casuale */
+                                            mazzo->listaCarte = prependCarta(mazzo->listaCarte, scartaCartaTipo(&giocatori[giocatoreCorrente], EXPLODING_DJANNI));
+
+                                            /* si mescola mazzo */
+                                            mazzo = mescolaMazzo(mazzo, 's', &meooowRimossi);
+
+
                                         } else {
                                             /* se il giocatore, abbastanza stupidamente, non utilizza il MEOOOW di cui dispone, esplode */
                                             giocatori[giocatoreCorrente].inGioco = false;
@@ -226,7 +247,12 @@ int main() {
                             } else if(sceltaGioco == SALVA_PARTITA) {
                                 /* salvataggio della partita in un file con estensione .sav */
                             }
+
+
+                            sceltaSiNo = 0;
                         }
+
+                        sceltaSiNo = 0;
 
 
                     } else {
@@ -248,8 +274,16 @@ int main() {
                         giocatoreCorrente = (giocatoreCorrente + 1) % N_GIOCATORI;
                     }
                 } else {
-                    /* si avanza al prossimo turno */
-                    giocatoreCorrente = (giocatoreCorrente + 1) % N_GIOCATORI;
+                    /****************************************************************************************************
+                        si avanza al prossimo turno, se il giocatore è vittima della carta ATTACK resterà lo stesso anche
+                        nel prossimo turno
+                    ****************************************************************************************************/
+                    if(turnoDoppio && vittimaAttack == giocatoreCorrente) {
+                        /* giocatore corrente non cambia */
+                        turnoDoppio = false;
+                    } else {
+                        giocatoreCorrente = (giocatoreCorrente + 1) % N_GIOCATORI;
+                    }
                 }
 
 
