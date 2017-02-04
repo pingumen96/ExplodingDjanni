@@ -22,3 +22,4 @@ bool presenteExplodingDjanni(Giocatore *giocatore);
 Carta scartaCarta(Giocatore *giocatore, unsigned short indice);
 Carta scartaCartaTipo(Giocatore *giocatore, TipologiaCarta tipoCarta);
 bool possiedeTipoCarta(Giocatore *giocatore, TipologiaCarta tipoCarta);
+void aggiungiCarta(Carta carta, Giocatore *giocatore);

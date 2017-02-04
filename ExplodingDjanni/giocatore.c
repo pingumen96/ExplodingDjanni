@@ -111,7 +111,7 @@ Carta scartaCartaTipo(Giocatore *giocatore, TipologiaCarta tipoCarta) {
     (giocatore->carteInMano)--;
 
     /* debug */
-    stampaMano(giocatore);
+    /*stampaMano(giocatore);*/
 
     return cartaScartata;
 
@@ -163,4 +163,19 @@ bool possiedeTipoCarta(Giocatore *giocatore, TipologiaCarta tipoCarta) {
     }
 
     return false;
+}
+
+
+
+void aggiungiCarta(Carta carta, Giocatore *giocatore) {
+    unsigned short carteManoPrecedente = giocatore->carteInMano;
+
+    giocatore->carteInMano += 1;
+    giocatore->mano = (Carta *) realloc(giocatore->mano, giocatore->carteInMano * sizeof(Carta));
+    if(giocatore->mano == NULL) {
+        exit(-1);
+    }
+
+
+    giocatore->mano[carteManoPrecedente] = carta;
 }

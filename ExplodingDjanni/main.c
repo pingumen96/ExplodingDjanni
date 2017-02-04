@@ -13,7 +13,7 @@ int main() {
     Mazzo *mazzo = NULL;
     bool gameOver = false, saltaPesca = false, turnoDoppio = false;
     char sceltaSiNo = 0;
-    unsigned short scelta, sceltaMenuPrincipale, sceltaGioco = 0, i, giocatoreCorrente, giocatoreSuccessivo, vittimaAttack;
+    unsigned short scelta, sceltaMenuPrincipale, sceltaGioco = 0, i, giocatoreCorrente, giocatoreSuccessivo, vittimaAttack, giocatoreCartaRubata;
     StatiGioco stato = MENU_PRINCIPALE;
     NodoCarta *meooowRimossi;
 
@@ -77,7 +77,7 @@ int main() {
                     giocatori[i].inGioco = true;
 
                     /* stampa mano, debug*/
-                    stampaMano(&giocatori[i]);
+                    /*stampaMano(&giocatori[i]);*/
                 }
 
                 /* si rimettono le carte nel mazzo e si mescola */
@@ -91,7 +91,8 @@ int main() {
                 stato = IN_GIOCO;
 
             } else if(sceltaMenuPrincipale == CARICA_PARTITA) {
-                /* codice per caricare la partita da file binario */
+                /* inizio codice per caricare la partita da file binario */
+                /* fine codice per caricare la partita da file binario */
                 stato = IN_GIOCO;
             }
 
@@ -193,8 +194,50 @@ int main() {
                                     } else if(giocatori[giocatoreCorrente].mano[scelta].tipo == SKIP) {
                                         saltaPesca = true;
                                     } else if(giocatori[giocatoreCorrente].mano[scelta].tipo == ATTACK) {
+                                        /* a qualcuno tocca fare il turno doppio :D */
                                         turnoDoppio = true;
                                         vittimaAttack = giocatoreSuccessivo;
+
+                                        /* si conclude il turno del giocatore */
+                                        sceltaGioco = FINISCI_TURNO;
+                                    } else if(giocatori[giocatoreCorrente].mano[scelta].tipo == FAVOR) {
+                                        /* il giocatore deve scegliere un avversario e quest'ultimo sceglie quale carta dargli,
+                                        può essere annullato dalla carta NOPE */
+                                        /* comportamento diverso a seconda che il giocatore scelto sia la CPU o meno */
+                                        if(giocatori[giocatoreCorrente].tipo == UMANO) {
+                                            printf("A quale dei tuoi avversari vuoi rubare una carta? (verra' scelta da lui)\n");
+                                            for(i = 0; i < N_GIOCATORI; i++) {
+                                                /* stampa dei giocatori in gioco diversi da quello corrente */
+                                                if(i != giocatoreCorrente && giocatori[i].inGioco) {
+                                                    printf("%hu. %s\n", i, giocatori[i].nome);
+                                                }
+
+
+                                            }
+                                            do {
+                                                scanf("%hu", &giocatoreCartaRubata);
+                                            } while(giocatoreCartaRubata > N_GIOCATORI &&
+                                                    !giocatori[giocatoreCartaRubata].inGioco &&
+                                                    giocatoreCartaRubata == giocatoreCorrente);
+
+                                            printf("%s, scegli quale carta dare a %s:\n", giocatori[giocatoreCartaRubata].nome, giocatori[giocatoreCorrente].nome);
+
+                                            for(i = 0; i < giocatori[giocatoreCartaRubata].carteInMano; i++) {
+                                                printf("%hu. ", i);
+                                                stampaCarta(giocatori[giocatoreCartaRubata].mano[i]);
+                                            }
+
+                                            do {
+                                                scanf("%hu", &scelta);
+                                                getchar();
+                                            } while(scelta >= giocatori[giocatoreCartaRubata].carteInMano);
+
+                                           aggiungiCarta(scartaCarta(&giocatori[giocatoreCartaRubata], scelta), &giocatori[giocatoreCorrente]);
+
+
+                                        } else {
+                                            /* gestione AI */
+                                        }
                                     }
                                 }
 
