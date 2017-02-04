@@ -238,6 +238,16 @@ int main() {
                                         } else {
                                             /* gestione AI */
                                         }
+                                    } else if(giocatori[giocatoreCorrente].mano[scelta].tipo == SEE_THE_FUTURE) {
+                                        printf("Ecco le prime tre carte in cima al mazzo:\n");
+                                        seeTheFuture(mazzo->listaCarte, CARTE_SEE_THE_FUTURE);
+                                    } else if(giocatori[giocatoreCorrente].mano[scelta].tipo == DJANNI) {
+                                        /*
+                                            se giocata da sola non ha effetto, se giocata in tripla, il giocatore
+                                            deve scegliere un avversario e prenderà a caso una sua carta; se giocata
+                                            in tripla, il giocatore deve scegliere un avversario e prenderà una sua
+                                            carta a scelta
+                                        */
                                     }
                                 }
 
@@ -273,10 +283,7 @@ int main() {
                                             scartaCartaTipo(&giocatori[giocatoreCorrente], MEOOOW);
 
                                             /* si rimette EXPLODING DJANNI nel mazzo in un posto casuale */
-                                            mazzo->listaCarte = prependCarta(mazzo->listaCarte, scartaCartaTipo(&giocatori[giocatoreCorrente], EXPLODING_DJANNI));
-
-                                            /* si mescola mazzo */
-                                            mazzo = mescolaMazzo(mazzo, 's', &meooowRimossi);
+                                            inserimentoCasuale(scartaCartaTipo(&giocatori[giocatoreCorrente], EXPLODING_DJANNI), mazzo);
 
 
                                         } else {

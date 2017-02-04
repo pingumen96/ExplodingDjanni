@@ -317,3 +317,37 @@ unsigned short contatoreMeooow(NodoCarta *testa) {
 
     return contatore;
 }
+
+
+void seeTheFuture(NodoCarta *testa, unsigned short numeroCarte) {
+    NodoCarta *iteratore = testa;
+    unsigned short contatore = 0;
+
+    /* si scorre la lista stampando i primi numeroCarte elementi */
+    while(iteratore != NULL && contatore < numeroCarte) {
+        stampaCarta(iteratore->carta);
+        iteratore = iteratore->prossima;
+
+        contatore++;
+    }
+
+}
+
+void inserimentoCasuale(Carta carta, Mazzo *mazzo) {
+    /* inserisce una carta in una posizione casuale del mazzo */
+    unsigned short i, posizioneCasuale;
+    NodoCarta *corrente = mazzo->listaCarte;
+
+    posizioneCasuale = rand() % dimensioneMazzo(mazzo->listaCarte);
+
+    /* scorre la lista sino alla posizione nella quale verrà inserita la carta */
+    for(i = 0; i < posizioneCasuale; i++) {
+        corrente = corrente->prossima;
+    }
+
+    /* viene inserita la carta */
+    corrente->prossima = prependCarta(corrente->prossima, carta);
+
+
+
+}

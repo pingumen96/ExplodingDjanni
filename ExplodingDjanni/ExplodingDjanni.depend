@@ -50,7 +50,7 @@
 	<stdbool.h>
 	"mazzo.h"
 
-1486125105 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/mazzo.h
+1486230956 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/mazzo.h
 
 1486163284 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/mazzo.c
 	"mazzo.h"
@@ -66,7 +66,7 @@
 	"utilita.h"
 	<math.h>
 
-1486229804 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/main.c
+1486230425 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/main.c
 	<stdio.h>
 	<stdlib.h>
 	<math.h>
