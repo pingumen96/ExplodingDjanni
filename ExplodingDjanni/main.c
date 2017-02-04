@@ -11,9 +11,10 @@ int main() {
     /* variabili di gioco */
     Giocatore giocatori[N_GIOCATORI];
     Mazzo *mazzo = NULL;
-    bool gameOver = false, saltaPesca = false, turnoDoppio = false;
+    bool gameOver = false, saltaPesca = false, turnoDoppio = false, doppioDjanni = false, triploDjanni = false;
     char sceltaSiNo = 0;
-    unsigned short scelta, sceltaMenuPrincipale, sceltaGioco = 0, i, giocatoreCorrente, giocatoreSuccessivo, vittimaAttack, giocatoreCartaRubata;
+    unsigned short scelta, sceltaMenuPrincipale, sceltaGioco = 0, i, giocatoreCorrente, giocatoreSuccessivo, vittimaAttack, giocatoreCartaRubata,
+                                                 contatoreDjanniUsati, contatoreDjanniMano;
     StatiGioco stato = MENU_PRINCIPALE;
     NodoCarta *meooowRimossi;
 
@@ -168,23 +169,24 @@ int main() {
 
                                 /* attivazione effetto della carta */
 
-                                /* si controlla se il giocatore successivo (ancora in gioco) possiede un NOPE per bloccare l'effetto se possibile */
-
-
-                                if(possiedeTipoCarta(&giocatori[giocatoreSuccessivo], NOPE) &&
-                                        giocatori[giocatoreCorrente].mano[scelta].tipo != EXPLODING_DJANNI &&
+                                /* si controlla se i giocatori (ancora in gioco) possiedono un NOPE per bloccare l'effetto se possibile */
+                                if(giocatori[giocatoreCorrente].mano[scelta].tipo != EXPLODING_DJANNI &&
                                         giocatori[giocatoreCorrente].mano[scelta].tipo != MEOOOW) {
-                                    printf("%s, vuoi annullare l'effetto della carta giocata da %s? (s/n)\n", giocatori[giocatoreSuccessivo].nome, giocatori[giocatoreCorrente].nome);
-                                    do {
-                                        scanf("%c", &sceltaSiNo);
-                                        getchar();
+                                    for(i = 0; i < N_GIOCATORI && sceltaSiNo != 's'; i++) {
+                                        if(possiedeTipoCarta(&giocatori[i], NOPE) && i != giocatoreCorrente && giocatori[i].inGioco) {
+                                            printf("%s, vuoi annullare l'effetto della carta giocata da %s? (s/n)\n", giocatori[i].nome, giocatori[giocatoreCorrente].nome);
+                                            do {
+                                                scanf("%c", &sceltaSiNo);
+                                                getchar();
 
-                                    } while(sceltaSiNo != 'n' && sceltaSiNo != 's');
+                                            } while(sceltaSiNo != 'n' && sceltaSiNo != 's');
+                                        }
+                                    }
                                 }
 
                                 if(sceltaSiNo == 's') {
-                                    /* si scarta il NOPE del giocatore successivo */
-                                    scartaCartaTipo(&giocatori[giocatoreSuccessivo], NOPE);
+                                    /* si scarta il NOPE del giocatore che l'ha usato */
+                                    scartaCartaTipo(&giocatori[i], NOPE);
                                 } else {
                                     /* si attiva effetto della carta giocata, diverso a seconda del tipo */
                                     if(giocatori[giocatoreCorrente].mano[scelta].tipo == SHUFFLE) {
@@ -201,8 +203,6 @@ int main() {
                                         /* si conclude il turno del giocatore */
                                         sceltaGioco = FINISCI_TURNO;
                                     } else if(giocatori[giocatoreCorrente].mano[scelta].tipo == FAVOR) {
-                                        /* il giocatore deve scegliere un avversario e quest'ultimo sceglie quale carta dargli,
-                                        può essere annullato dalla carta NOPE */
                                         /* comportamento diverso a seconda che il giocatore scelto sia la CPU o meno */
                                         if(giocatori[giocatoreCorrente].tipo == UMANO) {
                                             printf("A quale dei tuoi avversari vuoi rubare una carta? (verra' scelta da lui)\n");
@@ -232,7 +232,7 @@ int main() {
                                                 getchar();
                                             } while(scelta >= giocatori[giocatoreCartaRubata].carteInMano);
 
-                                           aggiungiCarta(scartaCarta(&giocatori[giocatoreCartaRubata], scelta), &giocatori[giocatoreCorrente]);
+                                            aggiungiCarta(scartaCarta(&giocatori[giocatoreCartaRubata], scelta), &giocatori[giocatoreCorrente]);
 
 
                                         } else {
@@ -248,11 +248,115 @@ int main() {
                                             in tripla, il giocatore deve scegliere un avversario e prenderà una sua
                                             carta a scelta
                                         */
+                                        contatoreDjanniUsati = 1;
+                                        contatoreDjanniMano = contatoreCartaTipoMano(giocatori[giocatoreCorrente].mano, DJANNI, giocatori[giocatoreCorrente].carteInMano);
+                                        if(contatoreDjanniMano >= 2) {
+
+                                            do {
+                                                printf("Vuoi usare anche un'altra Djanni card? (s/n)\n");
+
+                                                do {
+                                                    scanf("%c", &sceltaSiNo);
+                                                } while(sceltaSiNo != 'n' && sceltaSiNo != 's');
+
+                                                if(sceltaSiNo == 's') {
+                                                    contatoreDjanniUsati++;
+                                                }
+                                            } while(sceltaSiNo != 'n' && contatoreDjanniUsati < contatoreDjanniMano);
+
+                                            if(contatoreDjanniUsati > 2) {
+                                                /* se si usano 3 o più DJANNI */
+                                                /* si sceglie avversario e una carta delle sue */
+                                                triploDjanni = true;
+                                                if(giocatori[giocatoreCorrente].tipo == UMANO) {
+                                                    printf("A quale dei tuoi avversari vuoi rubare una carta? (verra' scelta da lui)\n");
+                                                    for(i = 0; i < N_GIOCATORI; i++) {
+                                                        /* stampa dei giocatori in gioco diversi da quello corrente */
+                                                        if(i != giocatoreCorrente && giocatori[i].inGioco) {
+                                                            printf("%hu. %s\n", i, giocatori[i].nome);
+                                                        }
+                                                    }
+                                                    do {
+                                                        scanf("%hu", &giocatoreCartaRubata);
+                                                    } while(giocatoreCartaRubata > N_GIOCATORI &&
+                                                            !giocatori[giocatoreCartaRubata].inGioco &&
+                                                            giocatoreCartaRubata == giocatoreCorrente);
+
+                                                    printf("%s, scegli quale carta rubare da %s:\n", giocatori[giocatoreCorrente].nome, giocatori[giocatoreCartaRubata].nome);
+
+                                                    for(i = 0; i < giocatori[giocatoreCartaRubata].carteInMano; i++) {
+                                                        printf("%hu. ", i);
+                                                        stampaCarta(giocatori[giocatoreCartaRubata].mano[i]);
+                                                    }
+
+                                                    do {
+                                                        scanf("%hu", &scelta);
+                                                        getchar();
+                                                    } while(scelta >= giocatori[giocatoreCartaRubata].carteInMano);
+
+                                                    aggiungiCarta(scartaCarta(&giocatori[giocatoreCartaRubata], scelta), &giocatori[giocatoreCorrente]);
+
+
+                                                } else {
+                                                    /* gestione AI */
+                                                }
+
+                                            } else if(contatoreDjanniUsati > 1) {
+                                                /* se si usano 2 DJANNI */
+                                                /* si sceglie avversario e una carta random delle sue */
+                                                doppioDjanni = true;
+                                                if(giocatori[giocatoreCorrente].tipo == UMANO) {
+                                                    printf("A quale dei tuoi avversari vuoi rubare una carta? (non potrai vederla)\n");
+                                                    for(i = 0; i < N_GIOCATORI; i++) {
+                                                        /* stampa dei giocatori in gioco diversi da quello corrente */
+                                                        if(i != giocatoreCorrente && giocatori[i].inGioco) {
+                                                            printf("%hu. %s\n", i, giocatori[i].nome);
+                                                        }
+                                                    }
+                                                    do {
+                                                        scanf("%hu", &giocatoreCartaRubata);
+                                                    } while(giocatoreCartaRubata > N_GIOCATORI &&
+                                                            !giocatori[giocatoreCartaRubata].inGioco &&
+                                                            giocatoreCartaRubata == giocatoreCorrente);
+
+                                                    printf("%s, scegli quale carta rubare da %s:\n", giocatori[giocatoreCorrente].nome, giocatori[giocatoreCartaRubata].nome);
+
+                                                    for(i = 0; i < giocatori[giocatoreCartaRubata].carteInMano; i++) {
+                                                        printf("%hu. %hua carta\n", i, i + 1);
+                                                    }
+
+                                                    do {
+                                                        scanf("%hu", &scelta);
+                                                        getchar();
+                                                    } while(scelta >= giocatori[giocatoreCartaRubata].carteInMano);
+                                                    printf("Hai rubato: ");
+                                                    stampaCarta(giocatori[giocatoreCartaRubata].mano[scelta]);
+
+                                                    aggiungiCarta(scartaCarta(&giocatori[giocatoreCartaRubata], scelta), &giocatori[giocatoreCorrente]);
+
+
+                                                } else {
+                                                    /* gestione AI */
+                                                }
+                                            }
+                                        }
                                     }
                                 }
 
-                                /* infine la carta giocata viene scartata dal gioco */
-                                scartaCarta(&giocatori[giocatoreCorrente], scelta);
+                                /* infine le carte giocate vengono scartate dal gioco */
+                                if(doppioDjanni) {
+                                    scartaCartaTipo(&giocatori[giocatoreCorrente], DJANNI);
+                                    scartaCartaTipo(&giocatori[giocatoreCorrente], DJANNI);
+                                    doppioDjanni = false;
+                                } else if(triploDjanni) {
+                                    scartaCartaTipo(&giocatori[giocatoreCorrente], DJANNI);
+                                    scartaCartaTipo(&giocatori[giocatoreCorrente], DJANNI);
+                                    scartaCartaTipo(&giocatori[giocatoreCorrente], DJANNI);
+                                    triploDjanni = false;
+                                } else {
+                                    scartaCarta(&giocatori[giocatoreCorrente], scelta);
+                                }
+
 
                             } else if(sceltaGioco == FINISCI_TURNO) {
                                 /* se il giocatore non deve saltare la pesca (come nel caso in cui abbia giocato una carta SKIP) */
@@ -341,9 +445,6 @@ int main() {
                 sceltaSiNo = 0;
                 saltaPesca = false;
                 sceltaGioco = 0;
-
-
-
             }
         }
 

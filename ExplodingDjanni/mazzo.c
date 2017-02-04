@@ -155,7 +155,7 @@ Mazzo *mescolaMazzo(Mazzo *mazzo, char modalita, NodoCarta **meoowRimossi) {
         /*mazzo->numeroCarte -= CARTE_PESCATE_PRIMO_TURNO;*/
 
         /* si reinseriscono i MEOOOW nel mazzo */
-        contatoreMeooowTolti = contatoreMeooow(mazzo->listaCarte);
+        contatoreMeooowTolti = contatoreCartaTipoMazzo(mazzo->listaCarte, MEOOOW);
         while(dimensioneMazzo(*meoowRimossi) > 0) {
             mazzo->listaCarte = prependCarta(mazzo->listaCarte, prendiCarta(meoowRimossi, 0));
             /*printf("%u\n", dimensioneMazzo(mazzo->listaCarte));
@@ -187,8 +187,8 @@ Mazzo *mescolaMazzo(Mazzo *mazzo, char modalita, NodoCarta **meoowRimossi) {
             }
 
             corrente = corrente->prossima;
-            printf("%u\n\n", dimensioneMazzo(mazzo->listaCarte));
-            stampaMazzo(mazzo->listaCarte);
+            /*printf("%u\n\n", dimensioneMazzo(mazzo->listaCarte));
+            stampaMazzo(mazzo->listaCarte);*/
         }
         /*printf("%u\n\n", dimensioneMazzo(mazzo));*/
 
@@ -303,13 +303,13 @@ unsigned short dimensioneMazzo(NodoCarta *testa) {
 }
 
 
-unsigned short contatoreMeooow(NodoCarta *testa) {
+unsigned short contatoreCartaTipoMazzo(NodoCarta *testa, TipologiaCarta tipoCarta) {
     unsigned short contatore = 0;
     NodoCarta *iteratore = testa;
 
     /* si scorre la lista stampando gli elementi uno per uno */
     while(iteratore != NULL) {
-        if(iteratore->carta.tipo == MEOOOW) {
+        if(iteratore->carta.tipo == tipoCarta) {
             contatore++;
         }
         iteratore = iteratore->prossima;
@@ -347,7 +347,16 @@ void inserimentoCasuale(Carta carta, Mazzo *mazzo) {
 
     /* viene inserita la carta */
     corrente->prossima = prependCarta(corrente->prossima, carta);
+}
 
+unsigned short contatoreCartaTipoMano(Carta *mano, TipologiaCarta tipoCarta, unsigned short dimensione) {
+    unsigned short contatore, i;
 
+    for(i = 0; i < dimensione; i++) {
+        if(mano[i].tipo == tipoCarta) {
+            contatore++;
+        }
+    }
 
+    return contatore;
 }
