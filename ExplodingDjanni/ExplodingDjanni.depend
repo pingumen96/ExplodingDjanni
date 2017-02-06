@@ -40,19 +40,19 @@
 
 1485827498 /home/pingumen96/Desktop/ProgettoPR1/ExplodingDjanni/partita.h
 
-1486230209 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/giocatore.c
+1486337442 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/giocatore.c
 	<stdlib.h>
 	<stdio.h>
 	<stdbool.h>
 	"giocatore.h"
 
-1486229662 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/giocatore.h
+1486333401 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/giocatore.h
 	<stdbool.h>
 	"mazzo.h"
 
-1486240816 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/mazzo.h
+1486332964 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/mazzo.h
 
-1486240862 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/mazzo.c
+1486343597 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/mazzo.c
 	"mazzo.h"
 	"utilita.h"
 	<stdlib.h>
@@ -66,15 +66,16 @@
 	"utilita.h"
 	<math.h>
 
-1486243376 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/main.c
+1486392881 source:/home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/main.c
 	<stdio.h>
 	<stdlib.h>
 	<math.h>
 	<time.h>
 	<stdbool.h>
+	<string.h>
 	"partita.h"
 	"utilita.h"
 	"giocatore.h"
 
-1485909318 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/partita.h
+1486326674 /home/pingumen96/Dropbox/Università/1° anno/Primo semestre/Programmazione I/Laboratorio/Progetto finale/ExplodingDjanni/ExplodingDjanni/partita.h
 

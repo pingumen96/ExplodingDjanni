@@ -10,7 +10,7 @@ Giocatore creaGiocatore() {
     getchar();
     scanf("%24[^\n]s", nuovoGiocatore.nome);
     printf("Che tipo di giocatore vuoi che sia?\n");
-    printf("0. CPU\n1. Umano\n");
+    printf("0. Umano\n1. CPU\n");
     do {
         scanf("%u", &(nuovoGiocatore.tipo));
         /*getchar();*/
@@ -178,4 +178,16 @@ void aggiungiCarta(Carta carta, Giocatore *giocatore) {
 
 
     giocatore->mano[carteManoPrecedente] = carta;
+}
+
+
+bool esisteVincitore(Giocatore *giocatori) {
+    if((giocatori[0].inGioco && !giocatori[1].inGioco && !giocatori[2].inGioco && !giocatori[3].inGioco) ||
+                        (giocatori[1].inGioco && !giocatori[2].inGioco && !giocatori[3].inGioco && !giocatori[0].inGioco) ||
+                        (giocatori[2].inGioco && !giocatori[3].inGioco && !giocatori[0].inGioco && !giocatori[1].inGioco) ||
+                        (giocatori[3].inGioco && !giocatori[0].inGioco && !giocatori[1].inGioco && !giocatori[2].inGioco)) {
+        return true;
+    }
+
+    return false;
 }

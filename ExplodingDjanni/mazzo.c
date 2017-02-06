@@ -74,7 +74,7 @@ void stampaMazzo(NodoCarta *testa) {
 Mazzo *caricaMazzo(char* nomeFile) {
     FILE *fileMazzo;
     NodoCarta *listaCaricata = NULL;
-    Carta cartaTemporanea = {0, ""};
+    Carta cartaTemporanea = {"", 0};
     int temp;
     int contatoreCaratteri = 0, i;
     Mazzo *mazzo;
@@ -144,7 +144,7 @@ Mazzo *mescolaMazzo(Mazzo *mazzo, char modalita, NodoCarta **meoowRimossi) {
     NodoCarta *mazzoMescolato = NULL;
     unsigned short i = 0, posizioneRandom, contatoreMeooowTolti = 0, dimensioneMazzoPartita;
     NodoCarta *corrente;
-    Carta explodingDjanni = {EXPLODING_DJANNI, "EXPLODING DJANNI"};
+    Carta explodingDjanni = {"EXPLODING DJANNI", EXPLODING_DJANNI};
 
 
 
@@ -338,15 +338,20 @@ void inserimentoCasuale(Carta carta, Mazzo *mazzo) {
     unsigned short i, posizioneCasuale;
     NodoCarta *corrente = mazzo->listaCarte;
 
-    posizioneCasuale = rand() % dimensioneMazzo(mazzo->listaCarte);
+    /* può capitare che il mazzo sia vuoto */
+    if(dimensioneMazzo(mazzo->listaCarte) == 0) {
+        mazzo->listaCarte = prependCarta(mazzo->listaCarte, carta);
+    } else {
+        posizioneCasuale = rand() % dimensioneMazzo(mazzo->listaCarte);
 
-    /* scorre la lista sino alla posizione nella quale verrà inserita la carta */
-    for(i = 0; i < posizioneCasuale; i++) {
-        corrente = corrente->prossima;
+        /* scorre la lista sino alla posizione nella quale verrà inserita la carta */
+        for(i = 0; i < posizioneCasuale; i++) {
+            corrente = corrente->prossima;
+        }
+
+        /* viene inserita la carta */
+        corrente->prossima = prependCarta(corrente->prossima, carta);
     }
-
-    /* viene inserita la carta */
-    corrente->prossima = prependCarta(corrente->prossima, carta);
 }
 
 unsigned short contatoreCartaTipoMano(Carta *mano, TipologiaCarta tipoCarta, unsigned short dimensione) {

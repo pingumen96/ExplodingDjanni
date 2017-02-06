@@ -1,3 +1,5 @@
+#define DIM_NOME_SALVATAGGIO 30
+
 /* enumeratori */
 typedef enum {MENU_PRINCIPALE, IN_GIOCO} StatiGioco;
 typedef enum {NUOVA_PARTITA, CARICA_PARTITA} ScelteMenuPrincipale;

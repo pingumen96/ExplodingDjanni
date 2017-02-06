@@ -4,7 +4,7 @@
 #define N_GIOCATORI 4
 
 
-typedef enum {CPU, UMANO} TipoGiocatore;
+typedef enum {UMANO, CPU} TipoGiocatore;
 
 typedef struct {
     char nome[DIM_NOME_GIOCATORE];
@@ -23,3 +23,4 @@ Carta scartaCarta(Giocatore *giocatore, unsigned short indice);
 Carta scartaCartaTipo(Giocatore *giocatore, TipologiaCarta tipoCarta);
 bool possiedeTipoCarta(Giocatore *giocatore, TipologiaCarta tipoCarta);
 void aggiungiCarta(Carta carta, Giocatore *giocatore);
+bool esisteVincitore(Giocatore *giocatori);

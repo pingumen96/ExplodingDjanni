@@ -11,8 +11,8 @@ typedef enum {EXPLODING_DJANNI, MEOOOW, SHUFFLE, NOPE, SEE_THE_FUTURE, ATTACK, S
 
 /* definizione struttura della carta singola */
 typedef struct {
-    TipologiaCarta tipo;
     char titoloCarta[DIM_TITOLO_CARTA];
+    TipologiaCarta tipo;
 } Carta;
 
 /* definizione nodo in vista della creazione di una lista */
@@ -22,7 +22,7 @@ typedef struct NodoCarta {
 } NodoCarta;
 
 typedef struct {
-    unsigned short numeroCarte;
+    int numeroCarte;
     unsigned short numeroExplodingDjanni;
     unsigned short numeroMeow;
     NodoCarta *listaCarte;
