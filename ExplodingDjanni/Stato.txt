@@ -1,0 +1,7 @@
+Il turno è del giocatore 1 (Fabio), che è sotto Attack e quindi deve fare due turni.
+Nel mazzo ci sono 37 carte.
+
+Alessandro ha 4 carte
+Fabio ha 5 carte
+Giammi ha 5 carte
+Riccardo ha 5 carte

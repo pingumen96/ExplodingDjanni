@@ -355,7 +355,7 @@ void inserimentoCasuale(Carta carta, Mazzo *mazzo) {
 }
 
 unsigned short contatoreCartaTipoMano(Carta *mano, TipologiaCarta tipoCarta, unsigned short dimensione) {
-    unsigned short contatore, i;
+    unsigned short contatore = 0, i;
 
     for(i = 0; i < dimensione; i++) {
         if(mano[i].tipo == tipoCarta) {
@@ -364,4 +364,10 @@ unsigned short contatoreCartaTipoMano(Carta *mano, TipologiaCarta tipoCarta, uns
     }
 
     return contatore;
+}
+
+
+
+float probabilitaExplodingDjanni(Mazzo *mazzo) {
+    return (float) contatoreCartaTipoMazzo(mazzo->listaCarte, EXPLODING_DJANNI) / (float) dimensioneMazzo(mazzo->listaCarte);
 }

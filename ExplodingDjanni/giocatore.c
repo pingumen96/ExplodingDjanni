@@ -183,9 +183,9 @@ void aggiungiCarta(Carta carta, Giocatore *giocatore) {
 
 bool esisteVincitore(Giocatore *giocatori) {
     if((giocatori[0].inGioco && !giocatori[1].inGioco && !giocatori[2].inGioco && !giocatori[3].inGioco) ||
-                        (giocatori[1].inGioco && !giocatori[2].inGioco && !giocatori[3].inGioco && !giocatori[0].inGioco) ||
-                        (giocatori[2].inGioco && !giocatori[3].inGioco && !giocatori[0].inGioco && !giocatori[1].inGioco) ||
-                        (giocatori[3].inGioco && !giocatori[0].inGioco && !giocatori[1].inGioco && !giocatori[2].inGioco)) {
+            (giocatori[1].inGioco && !giocatori[2].inGioco && !giocatori[3].inGioco && !giocatori[0].inGioco) ||
+            (giocatori[2].inGioco && !giocatori[3].inGioco && !giocatori[0].inGioco && !giocatori[1].inGioco) ||
+            (giocatori[3].inGioco && !giocatori[0].inGioco && !giocatori[1].inGioco && !giocatori[2].inGioco)) {
         return true;
     }
 

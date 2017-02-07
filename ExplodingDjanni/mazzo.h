@@ -43,3 +43,4 @@ unsigned short contatoreCartaTipoMano(Carta *mano, TipologiaCarta tipoCarta, uns
 void stampaCarta(Carta carta);
 void seeTheFuture(NodoCarta *testa, unsigned short numeroCarte);
 void inserimentoCasuale(Carta carta, Mazzo *mazzo);
+float probabilitaExplodingDjanni(Mazzo *mazzo);
