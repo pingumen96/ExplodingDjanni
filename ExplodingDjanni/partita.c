@@ -198,6 +198,8 @@ unsigned short scegliCarta(Giocatore *giocatori, int giocatoreCorrente, Mazzo *m
                     tipoCartaScelta = FAVOR;
                 } else if(possiedeTipoCarta(&giocatori[giocatoreCorrente], SHUFFLE)) {
                     tipoCartaScelta = SHUFFLE;
+                } else if(possiedeTipoCarta(&giocatori[giocatoreCorrente], SEE_THE_FUTURE)) {
+                    tipoCartaScelta = SEE_THE_FUTURE;
                 } else {
                     /* se non ci sono situazioni particolarmente rischiose si gioca in maniera più avventata */
                     semaforo = ROSSO;
