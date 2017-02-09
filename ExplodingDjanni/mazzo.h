@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #define DIM_TITOLO_CARTA 128
 #define DIM_TITOLO_MAZZO 30
 #define MEOOOW_DA_PESCARE 4
@@ -30,6 +31,7 @@ typedef struct {
 } Mazzo;
 
 NodoCarta *prependCarta(NodoCarta *testa, Carta nuovaCarta);
+NodoCarta *appendCarta(NodoCarta *testa, Carta nuovaCarta);
 Carta pescaCarta(NodoCarta **testa);
 void stampaMazzo(NodoCarta *testa);
 Mazzo *caricaMazzo(char* nomeFile);
@@ -41,6 +43,6 @@ void eliminaCarta(NodoCarta **testa, unsigned short posizione);
 unsigned short contatoreCartaTipoMazzo(NodoCarta *testa, TipologiaCarta tipoCarta);
 unsigned short contatoreCartaTipoMano(Carta *mano, TipologiaCarta tipoCarta, unsigned short dimensione);
 void stampaCarta(Carta carta);
-void seeTheFuture(NodoCarta *testa, unsigned short numeroCarte);
+bool seeTheFuture(NodoCarta *testa, unsigned short numeroCarte);
 void inserimentoCasuale(Carta carta, Mazzo *mazzo);
 float probabilitaExplodingDjanni(Mazzo *mazzo);

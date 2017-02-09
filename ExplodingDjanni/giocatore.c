@@ -16,6 +16,7 @@ Giocatore creaGiocatore() {
         /*getchar();*/
     } while(nuovoGiocatore.tipo != UMANO && nuovoGiocatore.tipo != CPU);
 
+
     /* si settano i dati di default */
     nuovoGiocatore.carteInMano = 0;
     nuovoGiocatore.inGioco = false;

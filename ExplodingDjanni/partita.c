@@ -1,8 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "partita.h"
 
-#define SOGLIA_PERICOLO_EXPLODING_DJANNI 0.25
+#define SOGLIA_PERICOLO_EXPLODING_DJANNI 0.15
 #define SOGLIA_UTILIZZO_FAVOR 5
+#define SOGLIA_MAZZO_MOLTO_RISCHIOSO 12
+#define SOGLIA_MAZZO_RISCHIOSO 18
+#define NUMERO_SPARATO 255
 
 /* procedura che stampa a schermo la situazione attuale della partita */
 void stampaSituazionePartita(Giocatore *giocatori, Mazzo *mazzo) {
@@ -29,8 +33,8 @@ unsigned short sceltaMenuGioco(Giocatore *giocatori, int giocatoreCorrente, Mazz
     unsigned short sceltaGioco;
 
     /* variabili utili per IA */
-    unsigned short i, contatoreDjanni;
-    bool manoUtile = false;
+    unsigned short i, contatoreDjanni, carteMazzo = dimensioneMazzo(mazzo->listaCarte);
+    bool manoUtile = false, serveGiocare;
     float possibileExplodingDjanni;
 
     printf("Cosa vuoi fare?\n");
@@ -64,10 +68,27 @@ unsigned short sceltaMenuGioco(Giocatore *giocatori, int giocatoreCorrente, Mazz
 
             contatoreDjanni = contatoreCartaTipoMano(giocatori[giocatoreCorrente].mano, DJANNI, giocatori[giocatoreCorrente].carteInMano);
 
+            /* si determina se è necessario giocare o meno */
+            if(possibileExplodingDjanni > SOGLIA_PERICOLO_EXPLODING_DJANNI && carteMazzo < SOGLIA_MAZZO_RISCHIOSO) {
+                serveGiocare = true;
+            } else {
+                /***************************************************************************************************************
+                    la CPU decide, più o meno come un essere umano, se giocare o meno nonostante non sia strettamente necessario.
+                    C'è 1/4 di probabilità che la CPU decida di giocare.
+                ***************************************************************************************************************/
+                if(rand() % 4 <= 2) {
+                    serveGiocare = false;
+                } else {
+                    serveGiocare = true;
+                }
+
+            }
+
             for(i = 0; i < giocatori[giocatoreCorrente].carteInMano && !manoUtile; i++) {
                 /* se esiste almeno una carta utile in questa fase si decide di giocare */
-                if(!(giocatori[giocatoreCorrente].mano[i].tipo != NOPE && giocatori[giocatoreCorrente].mano[i].tipo != MEOOOW &&
-                     giocatori[giocatoreCorrente].mano[i].tipo == SHUFFLE && contatoreDjanni <= 1)) {
+                if(giocatori[giocatoreCorrente].mano[i].tipo == FAVOR || giocatori[giocatoreCorrente].mano[i].tipo == SEE_THE_FUTURE
+                        || giocatori[giocatoreCorrente].mano[i].tipo == SHUFFLE || giocatori[giocatoreCorrente].mano[i].tipo == ATTACK
+                        || giocatori[giocatoreCorrente].mano[i].tipo == SKIP || contatoreDjanni >= 2) {
 
                     manoUtile = true;
                 }
@@ -80,40 +101,47 @@ unsigned short sceltaMenuGioco(Giocatore *giocatori, int giocatoreCorrente, Mazz
                 La disposizione delle condizioni potrebbe apparire insensata ma facilita la modifica dei
                 comportamenti della CPU (se necessaria) in base alle condizioni stesse.
             ****************************************************************************************************/
-            if(manoUtile && possibileExplodingDjanni > SOGLIA_PERICOLO_EXPLODING_DJANNI) {
+            if(manoUtile && serveGiocare) {
                 sceltaGioco = GIOCA_CARTA;
-            } else if(manoUtile) {
-                /* se non c'è urgenza di giocare determinate carte si fanno altre valutazioni */
-                if(contatoreCartaTipoMano(giocatori[giocatoreCorrente].mano, FAVOR, giocatori[giocatoreCorrente].carteInMano) && giocatori[giocatoreCorrente].carteInMano < SOGLIA_UTILIZZO_FAVOR) {
-                    sceltaGioco = GIOCA_CARTA;
-                } else if(contatoreCartaTipoMano(giocatori[giocatoreCorrente].mano, SHUFFLE, giocatori[giocatoreCorrente].carteInMano)) {
-                    /* se c'è uno shuffle si gioca quello */
-                    sceltaGioco = GIOCA_CARTA;
-                } else {
-                    /* se proprio non c'è nulla di utile da fare */
-                    sceltaGioco = FINISCI_TURNO;
-                }
+
             } else {
                 sceltaGioco = FINISCI_TURNO;
             }
         }
+        /* si stampa la scelta effettuata dalla CPU come se fosse effettuata da un giocatore */
+        if(sceltaGioco == GIOCA_CARTA) {
+            printf("0");
+        } else {
+            printf("1");
+        }
+
+        printf("\n");
     }
+
 
     return sceltaGioco;
 }
 
 
-unsigned short scegliCarta(Giocatore *giocatori, int giocatoreCorrente, Mazzo *mazzo) {
-    unsigned short i, scelta;
+unsigned short scegliCarta(Giocatore *giocatori, int giocatoreCorrente, Mazzo *mazzo, bool rischioConcretoExpDjanni) {
+    unsigned short i, scelta = NUMERO_SPARATO, carteMazzo = dimensioneMazzo(mazzo->listaCarte);
+    PericoloExplodingDjanni semaforo;
+    float possibileExplodingDjanni = probabilitaExplodingDjanni(mazzo);
+    TipologiaCarta tipoCartaScelta;
+
+    /* si assegna numero che non corrisponde a nessuna tipologia di carta in modo da facilitare il while successivo (per la CPU) */
+    tipoCartaScelta = NUMERO_SPARATO;
+
+    printf("Scegli quale carta giocare:\n");
+    for(i = 0; i < giocatori[giocatoreCorrente].carteInMano; i++) {
+        printf("%hu. ", i);
+        stampaCarta(giocatori[giocatoreCorrente].mano[i]);
+    }
+
     if(giocatori[giocatoreCorrente].tipo == UMANO) {
-        printf("Scegli quale carta giocare:\n");
-        for(i = 0; i < giocatori[giocatoreCorrente].carteInMano; i++) {
-            printf("%hu. ", i);
-            stampaCarta(giocatori[giocatoreCorrente].mano[i]);
-        }
 
         scanf("%hu", &scelta);
-        getchar();
+        /*getchar();*/
 
         /* si dice quale carta sia stata giocata */
         printf("Carta giocata: ");
@@ -122,7 +150,73 @@ unsigned short scegliCarta(Giocatore *giocatori, int giocatoreCorrente, Mazzo *m
 
         return scelta;
     } else {
-        /* intelligenza artificiale decide quale carta giocare */
+        /********************************************************************************************************
+            intelligenza artificiale decide quale carta giocare.
+            Esistono tre livelli di rischio, indicati idealmente con un semaforo che può essere:
+            - ROSSO -> PERICOLO ALTO
+            - GIALLO -> PERICOLO MEDIO
+            - VERDE -> PERICOLO BASSO
+            In base al pericolo e in base alle carte che si possiedono ci si comporta in maniera differente.
+            La prima cosa che si fa è quindi quantificare il pericolo in cui ci si trova.
+        *********************************************************************************************************/
+
+        if((possibileExplodingDjanni > SOGLIA_PERICOLO_EXPLODING_DJANNI && carteMazzo < SOGLIA_MAZZO_MOLTO_RISCHIOSO) || rischioConcretoExpDjanni) {
+            semaforo = ROSSO;
+        } else if(possibileExplodingDjanni > SOGLIA_PERICOLO_EXPLODING_DJANNI && carteMazzo < SOGLIA_MAZZO_RISCHIOSO) {
+            semaforo = GIALLO;
+        } else {
+            /* nel momento in cui non ci sono pericoli si decide casualmente se usare qualche carta che si userebbe in altri contesti */
+            if(rand() % 2 == false) {
+                semaforo = VERDE;
+            } else {
+                semaforo = ROSSO;
+            }
+        }
+
+
+
+        while(tipoCartaScelta == NUMERO_SPARATO) {
+            /* se il semaforo è GIALLO o ROSSO si gioca, se lo si possiede, un SEE THE FUTURE per capire il rischio concreto */
+            if(possiedeTipoCarta(&giocatori[giocatoreCorrente], SEE_THE_FUTURE) && !rischioConcretoExpDjanni && (semaforo == GIALLO || semaforo == ROSSO)) {
+                tipoCartaScelta = SEE_THE_FUTURE;
+            } else if(semaforo == ROSSO) {
+                if(possiedeTipoCarta(&giocatori[giocatoreCorrente], ATTACK)) {
+                    tipoCartaScelta = ATTACK;
+                } else if(possiedeTipoCarta(&giocatori[giocatoreCorrente], SKIP)) {
+                    tipoCartaScelta = SKIP;
+                } else {
+                    semaforo = GIALLO;
+                }
+            } else if(semaforo == GIALLO) {
+                if(contatoreCartaTipoMano(giocatori[giocatoreCorrente].mano, DJANNI, giocatori[giocatoreCorrente].carteInMano) >= 2) {
+                    tipoCartaScelta = DJANNI;
+                } else {
+                    semaforo = VERDE;
+                }
+            } else if(semaforo == VERDE) {
+                if(possiedeTipoCarta(&giocatori[giocatoreCorrente], FAVOR)) {
+                    tipoCartaScelta = FAVOR;
+                } else if(possiedeTipoCarta(&giocatori[giocatoreCorrente], SHUFFLE)) {
+                    tipoCartaScelta = SHUFFLE;
+                } else {
+                    /* se non ci sono situazioni particolarmente rischiose si gioca in maniera più avventata */
+                    semaforo = ROSSO;
+                }
+            }
+        }
+
+        /* ora si cerca la carta scelta nella mano e la si gioca */
+        for(i = 0; i < giocatori[giocatoreCorrente].carteInMano && scelta == NUMERO_SPARATO; i++) {
+            if(giocatori[giocatoreCorrente].mano[i].tipo == tipoCartaScelta) {
+                scelta = i;
+            }
+        }
+
+        /* si stampa la carta scelta come se fosse stato un umano a scriverlo */
+        printf("%hu\n", scelta);
+
+
+
         return scelta;
     }
 }

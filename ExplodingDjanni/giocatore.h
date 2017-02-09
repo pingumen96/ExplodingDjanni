@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include "mazzo.h"
 #define DIM_NOME_GIOCATORE 24
 #define N_GIOCATORI 4

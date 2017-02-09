@@ -6,8 +6,9 @@ typedef enum {MENU_PRINCIPALE, IN_GIOCO} StatiGioco;
 typedef enum {NUOVA_PARTITA, CARICA_PARTITA} ScelteMenuPrincipale;
 typedef enum {EASY, MEDIUM, HARD} Difficolta;
 typedef enum {GIOCA_CARTA, FINISCI_TURNO, SALVA_PARTITA} ScelteMenuGioco;
+typedef enum {ROSSO, GIALLO, VERDE} PericoloExplodingDjanni;
 
 
 void stampaSituazionePartita(Giocatore *giocatori, Mazzo *mazzo);
 unsigned short sceltaMenuGioco(Giocatore *giocatori, int giocatoreCorrente, Mazzo *mazzo);
-unsigned short scegliCarta(Giocatore *giocatori, int giocatoreCorrente, Mazzo *mazzo);
+unsigned short scegliCarta(Giocatore *giocatori, int giocatoreCorrente, Mazzo *mazzo, bool rischioConcretoExpDjanni);

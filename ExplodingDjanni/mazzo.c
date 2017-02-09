@@ -30,6 +30,32 @@ NodoCarta *prependCarta(NodoCarta *testa, Carta nuovaCarta) {
     return nuovaTesta;
 }
 
+
+/* si inserisce un elemento in coda alla lista, ovvero alla fine del mazzo */
+NodoCarta *appendCarta(NodoCarta *testa, Carta nuovaCarta) {
+    NodoCarta *nuovoNodo = NULL;
+    NodoCarta *corrente = testa;
+    nuovoNodo = (NodoCarta *) malloc(sizeof(NodoCarta));
+    if(nuovoNodo == NULL) {
+        exit(-1);
+    }
+
+    nuovoNodo->carta = nuovaCarta;
+    nuovoNodo->prossima = NULL;
+
+    if(testa != NULL) {
+        while(corrente->prossima != NULL) {
+            corrente = corrente->prossima;
+        }
+
+        corrente->prossima = nuovoNodo;
+        return testa;
+    } else {
+        return nuovoNodo;
+    }
+
+}
+
 void stampaCarta(Carta carta) {
     /* a seconda del tipo di carta si stampa quello corrispondente */
     if(carta.tipo == NOPE) {
@@ -319,17 +345,25 @@ unsigned short contatoreCartaTipoMazzo(NodoCarta *testa, TipologiaCarta tipoCart
 }
 
 
-void seeTheFuture(NodoCarta *testa, unsigned short numeroCarte) {
+bool seeTheFuture(NodoCarta *testa, unsigned short numeroCarte) {
     NodoCarta *iteratore = testa;
     unsigned short contatore = 0;
+    bool rischioConcretoExpDjanni = false;
 
     /* si scorre la lista stampando i primi numeroCarte elementi */
     while(iteratore != NULL && contatore < numeroCarte) {
+        /* si vede se esce exploding djanni */
+        if(!rischioConcretoExpDjanni && iteratore->carta.tipo == EXPLODING_DJANNI) {
+            rischioConcretoExpDjanni = true;
+        }
+
         stampaCarta(iteratore->carta);
         iteratore = iteratore->prossima;
 
         contatore++;
     }
+
+    return rischioConcretoExpDjanni;
 
 }
 
