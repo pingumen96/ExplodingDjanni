@@ -405,3 +405,27 @@ unsigned short contatoreCartaTipoMano(Carta *mano, TipologiaCarta tipoCarta, uns
 float probabilitaExplodingDjanni(Mazzo *mazzo) {
     return (float) contatoreCartaTipoMazzo(mazzo->listaCarte, EXPLODING_DJANNI) / (float) dimensioneMazzo(mazzo->listaCarte);
 }
+
+
+/* si determina l'importanza assoluta di una carta all'interno di una partita in una scala da 1 a 8 (EXPLODING DJANNI non viene considerato) */
+unsigned short valoreCarta(TipologiaCarta tipoCarta) {
+    if(tipoCarta == MEOOOW) {
+        return 8;
+    } else if(tipoCarta == ATTACK) {
+        return 7;
+    } else if(tipoCarta == SKIP) {
+        return 6;
+    } else if(tipoCarta == NOPE) {
+        return 5;
+    } else if(tipoCarta == FAVOR) {
+        return 4;
+    } else if(tipoCarta == DJANNI) {
+        return 3;
+    } else if(tipoCarta == SEE_THE_FUTURE) {
+        return 2;
+    } else if(tipoCarta == SHUFFLE) {
+        return 1;
+    } else {
+        return 0;
+    }
+}

@@ -4,6 +4,7 @@
 #define MEOOOW_DA_PESCARE 4
 #define EXPLODING_DJANNI_RIMOSSI 3
 #define CARTE_SEE_THE_FUTURE 3
+#define MAX_DJANNI_UTILIZZABILI 3
 
 char *MAZZO_EASY, *MAZZO_MEDIUM, *MAZZO_HARD;
 
@@ -43,6 +44,7 @@ void eliminaCarta(NodoCarta **testa, unsigned short posizione);
 unsigned short contatoreCartaTipoMazzo(NodoCarta *testa, TipologiaCarta tipoCarta);
 unsigned short contatoreCartaTipoMano(Carta *mano, TipologiaCarta tipoCarta, unsigned short dimensione);
 void stampaCarta(Carta carta);
+unsigned short valoreCarta(TipologiaCarta tipoCarta);
 bool seeTheFuture(NodoCarta *testa, unsigned short numeroCarte);
 void inserimentoCasuale(Carta carta, Mazzo *mazzo);
 float probabilitaExplodingDjanni(Mazzo *mazzo);
