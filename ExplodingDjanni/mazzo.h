@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "utilita.h"
 #define DIM_TITOLO_CARTA 128
 #define DIM_TITOLO_MAZZO 30
 #define MEOOOW_DA_PESCARE 4

@@ -5,7 +5,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include "partita.h"
-#include "utilita.h"
 
 int main() {
     /* variabili di gioco */
@@ -311,11 +310,13 @@ int main() {
 
                                 /* si mostra in output la scelta effettuata */
                                 printf("%hu\n", giocatoreCartaRubata);
+                                fprintf(loggerPartita, "TURNO %hu %s VUOLE RUBARE UNA CARTA A %s\n", contatoreTurniPartita, giocatori[giocatoreCorrente].nome, giocatori[giocatoreCartaRubata].nome);
                             }
 
                             /* se il giocatore selezionato non ha carte si mostra messaggio di errore, altrimenti si prosegue con l'effetto della carta */
                             if(giocatori[giocatoreCartaRubata].carteInMano == 0) {
                                 printf("Il giocatore selezionato non ha carte in mano.\n");
+                                fprintf(loggerPartita, "TURNO %hu %s NON HA CARTE IN MANO!\n", contatoreTurniPartita, giocatori[giocatoreCartaRubata].nome);
                             } else {
                                 printf("%s, scegli quale carta dare a %s:\n", giocatori[giocatoreCartaRubata].nome, giocatori[giocatoreCorrente].nome);
 
@@ -382,6 +383,7 @@ int main() {
                                     } else {
                                         /* intelligenza artificiale decide di giocare un'altra Djanni card */
                                         printf("%c\n", sceltaSiNo = 's');
+                                        fprintf(loggerPartita, "TURNO %hu %s HA USATO UN'ALTRA DJANNI CARD\n", contatoreTurniPartita, giocatori[giocatoreCorrente].nome);
                                     }
 
 
@@ -414,10 +416,10 @@ int main() {
                                         /* gestione intelligenza artificiale */
 
                                         /* variabile settata a valore default */
-                                        giocatoreCartaRubata = 255;
+                                        giocatoreCartaRubata = DEFAULT;
 
                                         /* si prende il primo giocatore disponibile per fare confronti */
-                                        for(i = 0; i < N_GIOCATORI && giocatoreCartaRubata == 255; i++) {
+                                        for(i = 0; i < N_GIOCATORI && giocatoreCartaRubata == DEFAULT; i++) {
                                             if(giocatori[i].inGioco && i != giocatoreCorrente) {
                                                 giocatoreCartaRubata = i;
                                             }
@@ -434,17 +436,20 @@ int main() {
                                         printf("%hu\n", giocatoreCartaRubata);
                                     }
 
+                                    fprintf(loggerPartita, "TURNO %hu %s VUOLE RUBARE UNA CARTA A %s\n", contatoreTurniPartita, giocatori[giocatoreCorrente].nome, giocatori[giocatoreCartaRubata].nome);
                                     printf("%s, scegli quale carta rubare da %s:\n", giocatori[giocatoreCorrente].nome, giocatori[giocatoreCartaRubata].nome);
 
-                                    for(i = 0; i < giocatori[giocatoreCartaRubata].carteInMano; i++) {
-                                        printf("%hu. ", i);
-                                        stampaCarta(giocatori[giocatoreCartaRubata].mano[i]);
-                                    }
+
 
                                     /* se il giocatore non possiede carte in mano si mostra messaggio di errore */
                                     if(giocatori[giocatoreCartaRubata].carteInMano == 0) {
                                         printf("Il giocatore selezionato non ha carte in mano.\n");
+                                        fprintf(loggerPartita, "TURNO %hu %s NON HA CARTE IN MANO!\n", contatoreTurniPartita, giocatori[giocatoreCartaRubata].nome);
                                     } else {
+                                        for(i = 0; i < giocatori[giocatoreCartaRubata].carteInMano; i++) {
+                                            printf("%hu. ", i);
+                                            stampaCarta(giocatori[giocatoreCartaRubata].mano[i]);
+                                        }
                                         if(giocatori[giocatoreCorrente].tipo == UMANO) {
                                             do {
                                                 scanf("%hu", &scelta);
@@ -706,6 +711,8 @@ int main() {
     /* si annuncia il vincitore, ovvero l'ultimo ad essere rimasto in gioco */
     printf("Il vincitore della partita e' %s!\n", giocatori[giocatoreCorrente].nome);
     fprintf(loggerPartita, "%s HA VINTO!", giocatori[giocatoreCorrente].nome);
+
+    /* chiusura logger */
     fclose(loggerPartita);
 
     return 0;

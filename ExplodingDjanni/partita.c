@@ -6,7 +6,6 @@
 #define SOGLIA_UTILIZZO_FAVOR 5
 #define SOGLIA_MAZZO_MOLTO_RISCHIOSO 12
 #define SOGLIA_MAZZO_RISCHIOSO 18
-#define NUMERO_SPARATO 255
 
 /* procedura che stampa a schermo la situazione attuale della partita */
 void stampaSituazionePartita(Giocatore *giocatori, Mazzo *mazzo) {
@@ -124,13 +123,13 @@ unsigned short sceltaMenuGioco(Giocatore *giocatori, int giocatoreCorrente, Mazz
 
 
 unsigned short scegliCarta(Giocatore *giocatori, int giocatoreCorrente, Mazzo *mazzo, bool rischioConcretoExpDjanni) {
-    unsigned short i, scelta = NUMERO_SPARATO, carteMazzo = dimensioneMazzo(mazzo->listaCarte);
+    unsigned short i, scelta = DEFAULT, carteMazzo = dimensioneMazzo(mazzo->listaCarte);
     PericoloExplodingDjanni semaforo;
     float possibileExplodingDjanni = probabilitaExplodingDjanni(mazzo);
     TipologiaCarta tipoCartaScelta;
 
     /* si assegna numero che non corrisponde a nessuna tipologia di carta in modo da facilitare il while successivo (per la CPU) */
-    tipoCartaScelta = NUMERO_SPARATO;
+    tipoCartaScelta = DEFAULT;
 
     printf("Scegli quale carta giocare:\n");
     for(i = 0; i < giocatori[giocatoreCorrente].carteInMano; i++) {
@@ -175,7 +174,7 @@ unsigned short scegliCarta(Giocatore *giocatori, int giocatoreCorrente, Mazzo *m
 
 
 
-        while(tipoCartaScelta == NUMERO_SPARATO) {
+        while(tipoCartaScelta == DEFAULT) {
             /* se il semaforo è GIALLO o ROSSO si gioca, se lo si possiede, un SEE THE FUTURE per capire il rischio concreto */
             if(possiedeTipoCarta(&giocatori[giocatoreCorrente], SEE_THE_FUTURE) && !rischioConcretoExpDjanni && (semaforo == GIALLO || semaforo == ROSSO)) {
                 tipoCartaScelta = SEE_THE_FUTURE;
@@ -208,7 +207,7 @@ unsigned short scegliCarta(Giocatore *giocatori, int giocatoreCorrente, Mazzo *m
         }
 
         /* ora si cerca la carta scelta nella mano e la si gioca */
-        for(i = 0; i < giocatori[giocatoreCorrente].carteInMano && scelta == NUMERO_SPARATO; i++) {
+        for(i = 0; i < giocatori[giocatoreCorrente].carteInMano && scelta == DEFAULT; i++) {
             if(giocatori[giocatoreCorrente].mano[i].tipo == tipoCartaScelta) {
                 scelta = i;
             }

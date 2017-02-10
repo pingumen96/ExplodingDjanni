@@ -178,12 +178,12 @@ Mazzo *mescolaMazzo(Mazzo *mazzo, char modalita, NodoCarta **meoowRimossi) {
         /* si aggiungono gli exploding djanni rimossi e i meooow che non sono stati pescati */
         printf("%u\n", dimensioneMazzo(mazzo->listaCarte));
 
-        /*mazzo->numeroCarte -= CARTE_PESCATE_PRIMO_TURNO;*/
-
         /* si reinseriscono i MEOOOW nel mazzo */
         contatoreMeooowTolti = contatoreCartaTipoMazzo(mazzo->listaCarte, MEOOOW);
         while(dimensioneMazzo(*meoowRimossi) > 0) {
             mazzo->listaCarte = prependCarta(mazzo->listaCarte, prendiCarta(meoowRimossi, 0));
+
+            /* debug */
             /*printf("%u\n", dimensioneMazzo(mazzo->listaCarte));
             stampaMazzo(mazzo->listaCarte);
             printf("%u\n", dimensioneMazzo(*meoowRimossi));*/
@@ -192,6 +192,8 @@ Mazzo *mescolaMazzo(Mazzo *mazzo, char modalita, NodoCarta **meoowRimossi) {
         /* si reinseriscono gli EXPLODING DJANNI */
         for(i = 0; i < mazzo->numeroExplodingDjanni; i++) {
             mazzo->listaCarte = prependCarta(mazzo->listaCarte, explodingDjanni);
+
+            /* debug */
             /*printf("%u\n", dimensioneMazzo(mazzo->listaCarte));
             stampaMazzo(mazzo->listaCarte);*/
         }
@@ -213,9 +215,13 @@ Mazzo *mescolaMazzo(Mazzo *mazzo, char modalita, NodoCarta **meoowRimossi) {
             }
 
             corrente = corrente->prossima;
+
+            /* debug */
             /*printf("%u\n\n", dimensioneMazzo(mazzo->listaCarte));
             stampaMazzo(mazzo->listaCarte);*/
         }
+
+        /* debug */
         /*printf("%u\n\n", dimensioneMazzo(mazzo));*/
 
 
@@ -257,6 +263,7 @@ Mazzo *mescolaMazzo(Mazzo *mazzo, char modalita, NodoCarta **meoowRimossi) {
 }
 
 
+/* si rimuove una carta da una lista. La carta rimossa viene restituita. */
 Carta prendiCarta(NodoCarta **testa, unsigned short posizione) {
     NodoCarta *temp = *testa, *successivo, *cartaCercata;
     unsigned short i;
@@ -329,6 +336,7 @@ unsigned short dimensioneMazzo(NodoCarta *testa) {
 }
 
 
+/* funzione che conta la quantità delle carte di un tipo dato in input in un mazzo anch'esso passata in input */
 unsigned short contatoreCartaTipoMazzo(NodoCarta *testa, TipologiaCarta tipoCarta) {
     unsigned short contatore = 0;
     NodoCarta *iteratore = testa;
@@ -344,7 +352,7 @@ unsigned short contatoreCartaTipoMazzo(NodoCarta *testa, TipologiaCarta tipoCart
     return contatore;
 }
 
-
+/* esegue l'effetto della carta SEE THE FUTURE */
 bool seeTheFuture(NodoCarta *testa, unsigned short numeroCarte) {
     NodoCarta *iteratore = testa;
     unsigned short contatore = 0;
@@ -367,6 +375,7 @@ bool seeTheFuture(NodoCarta *testa, unsigned short numeroCarte) {
 
 }
 
+/* procedura che inserisce una carta nel mazzo in posizione casuale */
 void inserimentoCasuale(Carta carta, Mazzo *mazzo) {
     /* inserisce una carta in una posizione casuale del mazzo */
     unsigned short i, posizioneCasuale;
@@ -388,6 +397,7 @@ void inserimentoCasuale(Carta carta, Mazzo *mazzo) {
     }
 }
 
+/* funzione che conta la quantità delle carte di un tipo dato in input in una mano anch'essa passata in input */
 unsigned short contatoreCartaTipoMano(Carta *mano, TipologiaCarta tipoCarta, unsigned short dimensione) {
     unsigned short contatore = 0, i;
 
@@ -401,7 +411,7 @@ unsigned short contatoreCartaTipoMano(Carta *mano, TipologiaCarta tipoCarta, uns
 }
 
 
-
+/* calcolo della probabilità di pescare EXPLODING DJANNI */
 float probabilitaExplodingDjanni(Mazzo *mazzo) {
     return (float) contatoreCartaTipoMazzo(mazzo->listaCarte, EXPLODING_DJANNI) / (float) dimensioneMazzo(mazzo->listaCarte);
 }
