@@ -140,7 +140,7 @@ unsigned short scegliCarta(Giocatore *giocatori, int giocatoreCorrente, Mazzo *m
     if(giocatori[giocatoreCorrente].tipo == UMANO) {
 
         scanf("%hu", &scelta);
-        /*getchar();*/
+        getchar();
 
         /* si dice quale carta sia stata giocata */
         printf("Carta giocata: ");

@@ -10,7 +10,7 @@ int main() {
     /* variabili di gioco */
     Giocatore giocatori[N_GIOCATORI];
     Mazzo *mazzo = NULL;
-    bool gameOver = false, saltaPesca = false, turnoDoppio = false, doppioDjanni = false, triploDjanni = false, rischioConcretoExpDjanni = false;
+    bool gameOver = false, saltaPesca = false, turnoDoppio = false, doppioDjanni = false, triploDjanni = false, rischioExpDjanni = false;
     char sceltaSiNo = 0;
     char nomePartitaCaricata[DIM_NOME_SALVATAGGIO], nomePartitaSalvata[DIM_NOME_SALVATAGGIO];
     FILE *fileCaricamento, *fileSalvataggio, *loggerPartita;
@@ -211,7 +211,7 @@ int main() {
                 /* se il giocatore ha scelto di giocare una carta */
                 if(sceltaGioco == GIOCA_CARTA) {
                     /* gestione di tutto ciò che riguarda gli effetti delle carte */
-                    scelta = scegliCarta(giocatori, giocatoreCorrente, mazzo, rischioConcretoExpDjanni);
+                    scelta = scegliCarta(giocatori, giocatoreCorrente, mazzo, rischioExpDjanni);
 
                     fprintf(loggerPartita, "TURNO %hu %s HA GIOCATO %s\n", contatoreTurniPartita, giocatori[giocatoreCorrente].nome, giocatori[giocatoreCorrente].mano[scelta].titoloCarta);
 
@@ -223,7 +223,6 @@ int main() {
                             /* prima di tutto si controlla se il giocatore è in gioco */
                             if(giocatori[i].inGioco && possiedeTipoCarta(&giocatori[i], NOPE) && i != giocatoreCorrente && giocatori[i].inGioco) {
                                 printf("%s, vuoi annullare l'effetto della carta giocata da %s? (s/n)\n", giocatori[i].nome, giocatori[giocatoreCorrente].nome);
-                                /*getchar();*/
 
                                 if(giocatori[i].tipo == UMANO) {
                                     do {
@@ -360,7 +359,7 @@ int main() {
                             fprintf(loggerPartita, "TURNO %hu %s HA VISTO LE PRIME TRE CARTE DEL MAZZO\n", contatoreTurniPartita, giocatori[giocatoreCorrente].nome);
 
                             /* utile anche per CPU */
-                            rischioConcretoExpDjanni = seeTheFuture(mazzo->listaCarte, CARTE_SEE_THE_FUTURE);
+                            rischioExpDjanni = seeTheFuture(mazzo->listaCarte, CARTE_SEE_THE_FUTURE);
                         } else if(giocatori[giocatoreCorrente].mano[scelta].tipo == DJANNI) {
                             /*
                                 se giocata da sola non ha effetto, se giocata in tripla, il giocatore
@@ -614,7 +613,7 @@ int main() {
                         contatoreTurniPartita++;
 
                         /* reset variabili */
-                        rischioConcretoExpDjanni = false;
+                        rischioExpDjanni = false;
 
 
                     }
